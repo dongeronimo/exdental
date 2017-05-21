@@ -18,7 +18,7 @@ namespace exdental
     {
         //O meu objeto pras coisas da vtk.
         //private VtkContext contextoDaVtk = null;
-        
+        private TelaVR telaVR = null;
         //Minha tela
         private TelaRadiografia telaRadiografia = null;
         //O carregador de dicom
@@ -56,6 +56,9 @@ namespace exdental
             telaRadiografia = new TelaRadiografia();
             telaRadiografia.CreateScreen(panelRenderizacao);
             telaRadiografia.SetImagem(image);
+            telaVR = new TelaVR();
+            telaVR.CreateScreen(panelVr);
+            telaVR.SetImagem(image);
             imageLoader.Dispose();
 
         }
@@ -68,6 +71,8 @@ namespace exdental
         {
             if (telaRadiografia != null)
                 telaRadiografia.Dispose();
+            if (telaVR != null)
+                telaVR.Dispose();
             if (image != null)
                 image.Dispose();
         }

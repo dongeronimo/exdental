@@ -9,8 +9,33 @@ void Pipeline::SetWL(int w, int l)
 	resliceActor->Update();
 }
 
-Pipeline::Pipeline(itk::Image<short, 3>::Pointer img, map<string, string> metadataDictionary)
+void Pipeline::ExecutePipeline()
 {
+	GPUFilter->SetInput(inputImage);
+	GPUFilter->SetNumberOfIterations(SuavizacaoNumberOfIteration);
+	GPUFilter->SetTimeStep(suavizacaoTimeSteps);
+	GPUFilter->SetConductanceParameter(suavizacaoConductanceParameter);
+	GPUFilter->UseImageSpacingOn();
+	try {
+		GPUFilter->Update();
+		GPUFilter->GetOutput()->UpdateBuffers();
+	}
+	catch (itk::ExceptionObject& excp) {
+		std::cout << "Caught exception during GPUFilter->GetOutput()->UpdateBuffers() " << excp << std::endl;
+		throw excp;
+	}
+	CPUFloatImageType::Pointer smoothingResult = CPUFloatImageType::New();
+	CopyFromGPUImageToCPU(GPUFilter->GetOutput(), smoothingResult);
+
+}
+
+Pipeline::Pipeline(InputImageType::Pointer img, map<string, string> metadataDictionary)
+{
+	this->inputImage = img;
+	this->GPUFilter = GPUAnisoDiffFilterType::New();
+	SuavizacaoNumberOfIteration = 10;
+	suavizacaoTimeSteps = 0.01;
+	suavizacaoConductanceParameter = 3.0;
 	//De itk::image pra vtkImageData;
 	vtkImport = vtkSmartPointer<vtkImageImport>::New();
 	int szX = img->GetLargestPossibleRegion().GetSize()[0];
@@ -36,8 +61,7 @@ Pipeline::Pipeline(itk::Image<short, 3>::Pointer img, map<string, string> metada
 	resliceMapper->SetInputData((vtkImageData*)vtkImport->GetOutputDataObject(0));
 	resliceMapper->SliceFacesCameraOn();
 	resliceMapper->SliceAtFocalPointOn();
-
-
+	
 	resliceProperties = vtkSmartPointer<vtkImageProperty>::New();
 	resliceProperties->SetColorWindow(256);
 	resliceProperties->SetColorLevel(1200);
@@ -49,31 +73,61 @@ Pipeline::Pipeline(itk::Image<short, 3>::Pointer img, map<string, string> metada
 	resliceActor->SetMapper(resliceMapper);
 	resliceActor->SetProperty(resliceProperties);
 
-#ifdef _VR_ON
-	//Agora a imagem existe no vtkImport.
-	mapper = vtkSmartPointer<vtkGPUVolumeRayCastMapper>::New();
-	mapper->SetMaxMemoryFraction(0.9);
-	mapper->SetInputData((vtkImageData*)vtkImport->GetOutputDataObject(0));
-	mappingProperties = vtkSmartPointer<vtkVolumeProperty>::New();
+
+	//A pipeline de VR
+	vrMapper = vtkSmartPointer<vtkGPUVolumeRayCastMapper>::New();
+	vrMapper->SetMaxMemoryFraction(0.9);
+	vrMapper->SetInputData((vtkImageData*)vtkImport->GetOutputDataObject(0));
+	vrProperty = vtkSmartPointer<vtkVolumeProperty>::New();
 	vtkSmartPointer<vtkPiecewiseFunction> opacityFunction = vtkSmartPointer<vtkPiecewiseFunction>::New();
 	opacityFunction->AddSegment(0, 0, 300, 0.2);
 	opacityFunction->AddSegment(301, 0.2, 800, 0.8);
 	opacityFunction->AddSegment(801, 0.8, 1200, 1);
-	mappingProperties->SetScalarOpacity(opacityFunction);
+	vrProperty->SetScalarOpacity(opacityFunction);
 	vtkSmartPointer<vtkColorTransferFunction> colorFunction = vtkSmartPointer<vtkColorTransferFunction>::New();
 	colorFunction->AddRGBSegment(0, 0, 0, 0, 300, 1, 0, 0);
 	colorFunction->AddRGBSegment(301, 1, 0, 0, 800, 1, 1, 0);
 	colorFunction->AddRGBSegment(801, 1, 1, 0, 1200, 1, 1, 1);
-	mappingProperties->SetColor(colorFunction);
-	mappingProperties->ShadeOn();
+	vrProperty->SetColor(colorFunction);
+	vrProperty->ShadeOn();
 	//Propriedades definindas
-	actor = vtkSmartPointer<vtkVolume>::New();
-	actor->SetProperty(mappingProperties);
-	actor->SetMapper(mapper);
-#endif
+	vrActor = vtkSmartPointer<vtkVolume>::New();
+	vrActor->SetProperty(vrProperty);
+	vrActor->SetMapper(vrMapper);
+
 }
+
+vtkSmartPointer<vtkVolume> Pipeline::GetVRActor()
+{
+	return vrActor;
+}
+
 
 vtkSmartPointer<vtkImageSlice> Pipeline::GetResliceActor()
 {
 	return resliceActor;
+}
+
+void Pipeline::CopyFromGPUImageToCPU(GPUFloatImageType::Pointer input, CPUFloatImageType::Pointer output)
+{
+	int inSzX = input->GetLargestPossibleRegion().GetSize()[0];
+	int inSzY = input->GetLargestPossibleRegion().GetSize()[1];
+	int inSzZ = input->GetLargestPossibleRegion().GetSize()[2];
+	double inSpacingX = input->GetSpacing()[0];
+	double inSpacingY = input->GetSpacing()[1];
+	double inSpacingZ = input->GetSpacing()[2];
+
+	output->SetRegions(input->GetLargestPossibleRegion());
+	output->Allocate();
+
+	itk::ImageRegionConstIterator<GPUFloatImageType> inputIterator(input, input->GetLargestPossibleRegion());
+	itk::ImageRegionIterator<CPUFloatImageType> outputIterator(output, output->GetLargestPossibleRegion());
+	const double inSpacing[] = { inSpacingX, inSpacingY, inSpacingZ };
+	output->SetSpacing(inSpacing);
+	while (!inputIterator.IsAtEnd())
+	{
+		outputIterator.Set(inputIterator.Get());
+		++inputIterator;
+		++outputIterator;
+	}
 }

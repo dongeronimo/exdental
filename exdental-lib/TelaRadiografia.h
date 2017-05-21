@@ -7,9 +7,11 @@
 #include "loadedImage.h"
 #include "pipeline.h"
 #include <memory>
+#include "IScreen.h"
+
 namespace geronimo_impl
 {
-	class TelaRadiografia
+	class TelaRadiografia : public IScreen
 	{
 	private:
 		vtkSmartPointer<vtkRenderer> rendererRadiografia;

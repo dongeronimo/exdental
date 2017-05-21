@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 set(CMAKE_SUPPRESS_REGENERATION true)
 project(exdental-interop)
 
-set(VTK_DIR "C:/lib/VTK-7.0.0")
+set(VTK_DIR "C:/lib/VTK-7.1.1/VTK-7.1.1/")
 set(ITK_DIR "C:/lib/InsightToolkit-4.8.1-64")
 # Find VTK
 find_package(VTK REQUIRED)
