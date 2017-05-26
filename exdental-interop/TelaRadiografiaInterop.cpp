@@ -20,7 +20,7 @@ namespace geronimo
 
 	void TelaRadiografia::SetImagem(Imagem^ imgCarregada)
 	{
-		telaRadio->ShowImage(imgCarregada->GetImagem());
+		telaRadio->ShowImage(imgCarregada->GetPipeline()); //GetImagem());
 	}
 
 	void TelaRadiografia::Resize(int w, int h)

@@ -77,8 +77,8 @@ namespace geronimo
 		{
 			imageSource->PushFile(s);
 		}
-		std::shared_ptr<datasource::LoadedImage> nativeImage = imageSource->Load("exame", identifiers[qualSerie]);
-		managedImg = gcnew Imagem(nativeImage);
+		std::unique_ptr<datasource::LoadedImage> nativeImage = imageSource->Load("exame", identifiers[qualSerie]);
+		managedImg = gcnew Imagem(std::move( nativeImage));
 	}
 
 	Imagem^ ImageLoader::GetImagemCarregada()

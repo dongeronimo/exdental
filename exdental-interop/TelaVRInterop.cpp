@@ -17,7 +17,7 @@ namespace geronimo
 
 	void TelaVR::SetImagem(Imagem^ imgCarregada)
 	{
-		telaVR->ShowImage(imgCarregada->GetImagem());
+		telaVR->ShowImage(imgCarregada->GetPipeline());
 	}
 
 	void TelaVR::Resize(int w, int h)

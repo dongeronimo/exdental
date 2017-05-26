@@ -15,8 +15,6 @@ using namespace System::Windows::Forms;
 
 namespace geronimo
 {
-
-
 	public ref class ImageLoader
 	{
 	private:

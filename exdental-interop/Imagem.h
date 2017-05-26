@@ -2,12 +2,14 @@
 #include <Windows.h>
 #include <memory>
 #include <loadedImage.h>
+#include <pipeline.h>
 namespace geronimo
 {
 	class StdPtrEncapsulator
 	{
 	public:		
-		std::shared_ptr<datasource::LoadedImage> data;
+		std::unique_ptr<datasource::LoadedImage> data;
+		std::shared_ptr<Pipeline> pipeline;
 	};
 
 	public ref class Imagem
@@ -15,9 +17,10 @@ namespace geronimo
 	private:
 		StdPtrEncapsulator* enc;
 	public:
-		Imagem(std::shared_ptr<datasource::LoadedImage> i);
+		Imagem(std::unique_ptr<datasource::LoadedImage> i);
 		~Imagem();
-		std::shared_ptr<datasource::LoadedImage> GetImagem();
+		datasource::LoadedImage* GetImagem();
+		std::shared_ptr<Pipeline> GetPipeline();
 	};
 }
 

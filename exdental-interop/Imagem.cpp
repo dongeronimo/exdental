@@ -1,14 +1,15 @@
 #include "Imagem.h"
-
+#include <map>
+#include <string>
 
 namespace geronimo
 {
-
-
-	Imagem::Imagem(std::shared_ptr<datasource::LoadedImage> i)
+	Imagem::Imagem(std::unique_ptr<datasource::LoadedImage> i)
 	{
 		enc = new StdPtrEncapsulator();
 		enc->data = std::move(i);
+		std::map<std::string, std::string> metadata;//HACK: To jogando fora a metadata
+//		enc->pipeline = std::make_shared<Pipeline>(enc->data, metadata);
 	}
 
 	Imagem::~Imagem()
@@ -16,8 +17,13 @@ namespace geronimo
 		enc->data.reset();
 	}
 
-	std::shared_ptr<datasource::LoadedImage> Imagem::GetImagem()
+	datasource::LoadedImage* Imagem::GetImagem()
 	{
-		return enc->data;
+		return enc->data.get();
+	}
+
+	std::shared_ptr<Pipeline> Imagem::GetPipeline()
+	{
+		return enc->pipeline;
 	}
 }
