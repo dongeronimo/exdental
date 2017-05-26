@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "loadedImage.h"
+#include "pipeline.h"
 
 namespace geronimo_impl
 {
@@ -10,6 +11,7 @@ namespace geronimo_impl
 		virtual ~IScreen(){}
 		virtual void Resize(int w, int h) = 0;
 		virtual void CreateScreen(HWND handle, int w, int h) = 0;
-		virtual void ShowImage(std::shared_ptr < datasource::LoadedImage > qual) = 0;
+		virtual void ShowImage(std::shared_ptr<Pipeline> pipe) = 0;
+		//virtual void ShowImage(std::shared_ptr < datasource::LoadedImage > qual) = 0;
 	};
 }

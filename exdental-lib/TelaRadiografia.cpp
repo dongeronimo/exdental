@@ -40,12 +40,11 @@ namespace geronimo_impl
 		renderWindow->Render();
 	}
 
-	void TelaRadiografia::ShowImage(std::shared_ptr<datasource::LoadedImage> qual)
+	void TelaRadiografia::ShowImage(std::shared_ptr<Pipeline> pipe)
 	{
 		assert(renderWindow);
-		imagem = qual;
-		pipe = std::make_unique<Pipeline>(imagem->GetImage(), imagem->GetMetadata());
-		rendererRadiografia->AddActor(pipe->GetResliceActor());
+		this->pipe = pipe; //std::make_unique<Pipeline>(imagem->GetImage(), imagem->GetMetadata());
+		rendererRadiografia->AddActor(this->pipe->GetResliceActor());
 		rendererRadiografia->ResetCamera();
 		rendererRadiografia->GetActiveCamera()->ParallelProjectionOn();
 		renderWindow->Render();

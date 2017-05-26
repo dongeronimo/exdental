@@ -11,28 +11,14 @@ void Pipeline::SetWL(int w, int l)
 
 void Pipeline::ExecutePipeline()
 {
-	GPUFilter->SetInput(inputImage);
-	GPUFilter->SetNumberOfIterations(SuavizacaoNumberOfIteration);
-	GPUFilter->SetTimeStep(suavizacaoTimeSteps);
-	GPUFilter->SetConductanceParameter(suavizacaoConductanceParameter);
-	GPUFilter->UseImageSpacingOn();
-	try {
-		GPUFilter->Update();
-		GPUFilter->GetOutput()->UpdateBuffers();
-	}
-	catch (itk::ExceptionObject& excp) {
-		std::cout << "Caught exception during GPUFilter->GetOutput()->UpdateBuffers() " << excp << std::endl;
-		throw excp;
-	}
-	CPUFloatImageType::Pointer smoothingResult = CPUFloatImageType::New();
-	CopyFromGPUImageToCPU(GPUFilter->GetOutput(), smoothingResult);
+
 
 }
 
 Pipeline::Pipeline(InputImageType::Pointer img, map<string, string> metadataDictionary)
 {
 	this->inputImage = img;
-	this->GPUFilter = GPUAnisoDiffFilterType::New();
+
 	SuavizacaoNumberOfIteration = 10;
 	suavizacaoTimeSteps = 0.01;
 	suavizacaoConductanceParameter = 3.0;
@@ -108,26 +94,3 @@ vtkSmartPointer<vtkImageSlice> Pipeline::GetResliceActor()
 	return resliceActor;
 }
 
-void Pipeline::CopyFromGPUImageToCPU(GPUFloatImageType::Pointer input, CPUFloatImageType::Pointer output)
-{
-	int inSzX = input->GetLargestPossibleRegion().GetSize()[0];
-	int inSzY = input->GetLargestPossibleRegion().GetSize()[1];
-	int inSzZ = input->GetLargestPossibleRegion().GetSize()[2];
-	double inSpacingX = input->GetSpacing()[0];
-	double inSpacingY = input->GetSpacing()[1];
-	double inSpacingZ = input->GetSpacing()[2];
-
-	output->SetRegions(input->GetLargestPossibleRegion());
-	output->Allocate();
-
-	itk::ImageRegionConstIterator<GPUFloatImageType> inputIterator(input, input->GetLargestPossibleRegion());
-	itk::ImageRegionIterator<CPUFloatImageType> outputIterator(output, output->GetLargestPossibleRegion());
-	const double inSpacing[] = { inSpacingX, inSpacingY, inSpacingZ };
-	output->SetSpacing(inSpacing);
-	while (!inputIterator.IsAtEnd())
-	{
-		outputIterator.Set(inputIterator.Get());
-		++inputIterator;
-		++outputIterator;
-	}
-}

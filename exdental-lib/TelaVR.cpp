@@ -33,12 +33,11 @@ namespace geronimo_impl
 		renderWindowInteractor->SetInteractorStyle(interactorStyle);
 
 	}
-	void TelaVR::ShowImage(std::shared_ptr < datasource::LoadedImage > qual)
+	void TelaVR::ShowImage(std::shared_ptr<Pipeline> pipe)
 	{
 		assert(renderWindow);
-		imagem = qual;
-		pipe = std::make_unique<Pipeline>(imagem->GetImage(), imagem->GetMetadata());
-		renderer->AddActor(pipe->GetVRActor());
+		this->pipe = pipe;
+		renderer->AddActor(this->pipe->GetVRActor());
 		renderer->ResetCamera();
 		renderer->GetActiveCamera()->ParallelProjectionOn();
 		renderer->Render();

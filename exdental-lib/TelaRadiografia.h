@@ -18,13 +18,13 @@ namespace geronimo_impl
 		vtkSmartPointer<vtkWin32OpenGLRenderWindow> renderWindow;
 		vtkSmartPointer<vtkWin32RenderWindowInteractor> renderWindowInteractor;
 		vtkSmartPointer<TelaRadiografiaInteractionStyle> interactorStyle;
-		std::unique_ptr<Pipeline> pipe;
-		std::shared_ptr<datasource::LoadedImage> imagem;
+		std::shared_ptr<Pipeline> pipe;
 	public:
 		TelaRadiografia();
 		void SetWL(int w, int l);
 		void Resize(int w, int h);
 		void CreateScreen(HWND handle, int w, int h);
-		void ShowImage(std::shared_ptr<datasource::LoadedImage> qual);
+		void ShowImage(std::shared_ptr<Pipeline> pipe)override;
+		
 	};
 }
