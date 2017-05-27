@@ -16,15 +16,8 @@ namespace exdental
 {
     public partial class formDoDicom : Form
     {
-        //O meu objeto pras coisas da vtk.
-        //private VtkContext contextoDaVtk = null;
-        private TelaVR telaVR = null;
-        //Minha tela
-        private TelaRadiografia telaRadiografia = null;
-        //O carregador de dicom
-        private ImageLoader imageLoader = null;
-        //A imagem carregada
-        private Imagem image = null;
+        private ImageLoader loader = null;
+        private geronimo.Image image = null;
 
         public formDoDicom()
         {
@@ -33,33 +26,36 @@ namespace exdental
 
         private void buttonAbrir_Click(object sender, EventArgs e)
         {
-            imageLoader = new ImageLoader();
-            imageLoader.SetProgressBar(progressBar);
-            List<String> listDeImagensNoDir = imageLoader.GetListaDeImagens(textBoxPath.Text);
-            if (listDeImagensNoDir.Count == 1)
+            loader = new ImageLoader();
+            List<String> listaDeImagens = loader.GetListaDeImagens(textBoxPath.Text);
+            if (listaDeImagens.Count == 0)
             {
-                progressBar.Value = 0;
-                imageLoader.LoadFromDir(textBoxPath.Text);
+                throw new Exception("Sem imagens");
+            }
+            else if (listaDeImagens.Count == 1)
+            {
+                loader.Load();
             }
             else
             {
                 FormEscolhaExame formEscolha = new FormEscolhaExame();
-                formEscolha.SetListaDeSeries(listDeImagensNoDir);
+                formEscolha.SetListaDeSeries(listaDeImagens);
                 formEscolha.ShowDialog();
                 int selectedRow = formEscolha.SelectedRow;
-                //Agora eu sei qual serie foi escolhida, passar pra vtk.
                 formEscolha.Dispose();
-                progressBar.Value = 0;
-                imageLoader.LoadFromDir(textBoxPath.Text, selectedRow);
+                loader.Load(selectedRow);
             }
-            image = imageLoader.GetImagemCarregada();
-            telaRadiografia = new TelaRadiografia();
-            telaRadiografia.CreateScreen(panelRenderizacao);
-            telaRadiografia.SetImagem(image);
-            telaVR = new TelaVR();
-            telaVR.CreateScreen(panelVr);
-            telaVR.SetImagem(image);
-            imageLoader.Dispose();
+            image = loader.GetImage();//A partir daqui não preciso mais do loader, já tenho 
+            //o que quero.
+
+            //image = imageLoader.GetImagemCarregada();
+            //telaRadiografia = new TelaRadiografia();
+            //telaRadiografia.CreateScreen(panelRenderizacao);
+            //telaRadiografia.SetImagem(image);
+            //telaVR = new TelaVR();
+            //telaVR.CreateScreen(panelVr);
+            //telaVR.SetImagem(image);
+            //imageLoader.Dispose();
 
         }
         private void formDoDicom_Shown(object sender, EventArgs e)
@@ -69,24 +65,24 @@ namespace exdental
 
         private void formDoDicom_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (telaRadiografia != null)
-                telaRadiografia.Dispose();
-            if (telaVR != null)
-                telaVR.Dispose();
-            if (image != null)
-                image.Dispose();
+            //if (telaRadiografia != null)
+            //    telaRadiografia.Dispose();
+            //if (telaVR != null)
+            //    telaVR.Dispose();
+            //if (image != null)
+            //    image.Dispose();
         }
 
         private void formDoDicom_ResizeEnd(object sender, EventArgs e)
         {
-            if(telaRadiografia!=null)
-                telaRadiografia.Resize(this.Size.Width, this.Size.Height);
+            //if(telaRadiografia!=null)
+            //    telaRadiografia.Resize(this.Size.Width, this.Size.Height);
         }
 
         private void formDoDicom_Resize(object sender, EventArgs e)
         {
-            if (telaRadiografia != null)
-                telaRadiografia.Resize(this.Size.Width, this.Size.Height);
+            //if (telaRadiografia != null)
+            //    telaRadiografia.Resize(this.Size.Width, this.Size.Height);
         }
         protected override void WndProc(ref Message m)
         {
@@ -94,8 +90,8 @@ namespace exdental
             {
                 if (m.WParam == new IntPtr(0xF030)) // Maximize event - SC_MAXIMIZE from Winuser.h
                 {
-                    if (telaRadiografia != null)
-                        telaRadiografia.Resize(this.Size.Width, this.Size.Height);
+                    //if (telaRadiografia != null)
+                    //    telaRadiografia.Resize(this.Size.Width, this.Size.Height);
                 }
             }
             base.WndProc(ref m);
@@ -107,7 +103,7 @@ namespace exdental
             {
                 int w = Int32.Parse(txtWindow.Text);
                 int l = Int32.Parse(txtLevel.Text);
-                telaRadiografia.SetWL(w, l);
+                //telaRadiografia.SetWL(w, l);
             }
             catch (Exception exception)
             {
@@ -121,7 +117,7 @@ namespace exdental
             {
                 int w = Int32.Parse(txtWindow.Text);
                 int l = Int32.Parse(txtLevel.Text);
-                telaRadiografia.SetWL(w, l);
+                //telaRadiografia.SetWL(w, l);
             }
             catch (Exception exception)
             {
