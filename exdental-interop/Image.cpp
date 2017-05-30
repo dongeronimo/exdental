@@ -6,6 +6,7 @@ namespace geronimo
 	{
 		data = new ImageNativeData();
 		data->imagem = img;
+		data->pipe = make_shared<pipeline::Pipeline>(data->imagem);
 	}
 	Image::~Image()
 	{

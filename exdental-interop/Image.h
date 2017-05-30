@@ -1,5 +1,6 @@
 #pragma once
 #include <ImageLoader.h>
+#include <Pipeline.h>
 #include <memory>
 using namespace std;
 namespace geronimo
@@ -8,6 +9,7 @@ namespace geronimo
 	{
 	public:
 		shared_ptr<imageLoader::LoadedImage> imagem;
+		shared_ptr<pipeline::Pipeline> pipe;
 	};
 
 	public ref class Image
