@@ -18,6 +18,8 @@ namespace exdental
     {
         private ImageLoader loader = null;
         private geronimo.Image image = null;
+        private geronimo.TelaRadiografia telaRadiografia = null;
+        private TelaVR telaVr = null;
 
         public formDoDicom()
         {
@@ -47,16 +49,13 @@ namespace exdental
             }
             image = loader.GetImage();//A partir daqui não preciso mais do loader, já tenho 
             //o que quero.
-
-            //image = imageLoader.GetImagemCarregada();
-            //telaRadiografia = new TelaRadiografia();
-            //telaRadiografia.CreateScreen(panelRenderizacao);
-            //telaRadiografia.SetImagem(image);
-            //telaVR = new TelaVR();
-            //telaVR.CreateScreen(panelVr);
-            //telaVR.SetImagem(image);
-            //imageLoader.Dispose();
-
+            telaRadiografia = new TelaRadiografia();
+            telaRadiografia.CreateScreen(panelRenderizacao);
+            telaRadiografia.SetImagem(image);
+            telaVr = new TelaVR();
+            telaVr.CreateScreen(panelVr);
+            telaVr.SetImagem(image);
+            loader.Dispose();
         }
         private void formDoDicom_Shown(object sender, EventArgs e)
         {
@@ -65,12 +64,12 @@ namespace exdental
 
         private void formDoDicom_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //if (telaRadiografia != null)
-            //    telaRadiografia.Dispose();
-            //if (telaVR != null)
-            //    telaVR.Dispose();
-            //if (image != null)
-            //    image.Dispose();
+            if (telaRadiografia != null)
+                telaRadiografia.Dispose();
+            if (telaVr != null)
+                telaVr.Dispose();
+            if (image != null)
+                image.Dispose();
         }
 
         private void formDoDicom_ResizeEnd(object sender, EventArgs e)
