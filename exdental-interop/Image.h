@@ -19,5 +19,6 @@ namespace geronimo
 	public:
 		Image(shared_ptr<imageLoader::LoadedImage> img);
 		~Image();
+		shared_ptr<pipeline::Pipeline> GetPipeline() { return data->pipe; }
 	};
 }

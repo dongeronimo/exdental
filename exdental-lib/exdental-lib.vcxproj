@@ -212,7 +212,13 @@
   <ItemGroup>
     <ClInclude Include="C:\src\exdental\exdental-lib\IScreen.h" />
     <ClInclude Include="C:\src\exdental\exdental-lib\Pipeline.h" />
+    <ClInclude Include="C:\src\exdental\exdental-lib\TelaRadiografia.h" />
+    <ClInclude Include="C:\src\exdental\exdental-lib\TelaRadiografiaInteractionStyle.h" />
+    <ClInclude Include="C:\src\exdental\exdental-lib\TelaVR.h" />
     <ClCompile Include="C:\src\exdental\exdental-lib\Pipeline.cpp"  />
+    <ClCompile Include="C:\src\exdental\exdental-lib\TelaRadiografia.cpp"  />
+    <ClCompile Include="C:\src\exdental\exdental-lib\TelaRadiografiaInteractionStyle.cpp"  />
+    <ClCompile Include="C:\src\exdental\exdental-lib\TelaVR.cpp"  />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:/libs/myItkImageLoader/myItkImageLoader.vcxproj">

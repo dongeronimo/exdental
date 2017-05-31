@@ -271,8 +271,12 @@
   <ItemGroup>
     <ClInclude Include="C:\src\exdental\exdental-interop\Image.h" />
     <ClInclude Include="C:\src\exdental\exdental-interop\ImageLoaderInterop.h" />
+    <ClInclude Include="C:\src\exdental\exdental-interop\TelaRadiografiaInterop.h" />
+    <ClInclude Include="C:\src\exdental\exdental-interop\TelaVRInterop.h" />
     <ClCompile Include="C:\src\exdental\exdental-interop\Image.cpp"  />
     <ClCompile Include="C:\src\exdental\exdental-interop\ImageLoaderInterop.cpp"  />
+    <ClCompile Include="C:\src\exdental\exdental-interop\TelaRadiografiaInterop.cpp"  />
+    <ClCompile Include="C:\src\exdental\exdental-interop\TelaVRInterop.cpp"  />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:/libs/myItkImageLoader/myItkImageLoader.vcxproj">
