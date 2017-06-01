@@ -1,4 +1,5 @@
 #include "Pipeline.h"
+#include <Windows.h>
 #include <vtkPiecewiseFunction.h>
 #include <vtkColorTransferFunction.h>
 
@@ -69,11 +70,24 @@ void pipeline::Pipeline::CreateFinalImageFromShort(ShortImage::Pointer src)
 	finalImage->Update();
 }
 
+pipeline::Pipeline::~Pipeline()
+{
+	FreeLibrary(hDllHandle);
+}
+
 pipeline::Pipeline::Pipeline(shared_ptr<LoadedImage> img)
 {
+	hDllHandle = LoadLibrary("exdental-opencl-module.dll");
+	if (!hDllHandle)
+		throw std::exception("dll não encontrada.");
+	GpuAnisotropicDelegate = (GpuAnisotropicFilterDelegate)GetProcAddress(hDllHandle, "ExecuteAnistropicDiffusion");
+	if(!GpuAnisotropicDelegate)
+		throw std::exception("ExecuteAnistropicDiffusion() não encontrada.");
 	finalImage = nullptr;
 	this->imagem = img;
-	CreateFinalImageFromShort(imagem->GetImage());
+	imagemPosSuavizacao = ShortImage::New();
+	GpuAnisotropicDelegate(imagem->GetImage(), imagemPosSuavizacao);
+	CreateFinalImageFromShort(imagemPosSuavizacao);
 	pipelineDoPlano = make_unique<SubPipelinePlanar>(finalImage);
 	pipelineDoVR = make_unique<SubPipelineVR>(finalImage);
 }

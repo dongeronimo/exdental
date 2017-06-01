@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "exdental-lib", "..\exdental
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "myItkImageLoader", "..\..\..\libs\myItkImageLoader\myItkImageLoader.vcxproj", "{D044310F-AEC6-3845-B700-220334B163C1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "exdental-opencl-module", "..\exdental-opencl-module\exdental-opencl-module.vcxproj", "{FC238033-DEE2-34FD-8294-00916C54E648}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,18 @@ Global
 		{D044310F-AEC6-3845-B700-220334B163C1}.RelWithDebInfo|Any CPU.ActiveCfg = RelWithDebInfo|x64
 		{D044310F-AEC6-3845-B700-220334B163C1}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
 		{D044310F-AEC6-3845-B700-220334B163C1}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
+		{FC238033-DEE2-34FD-8294-00916C54E648}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{FC238033-DEE2-34FD-8294-00916C54E648}.Debug|x64.ActiveCfg = Debug|x64
+		{FC238033-DEE2-34FD-8294-00916C54E648}.Debug|x64.Build.0 = Debug|x64
+		{FC238033-DEE2-34FD-8294-00916C54E648}.MinSizeRel|Any CPU.ActiveCfg = MinSizeRel|x64
+		{FC238033-DEE2-34FD-8294-00916C54E648}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
+		{FC238033-DEE2-34FD-8294-00916C54E648}.MinSizeRel|x64.Build.0 = MinSizeRel|x64
+		{FC238033-DEE2-34FD-8294-00916C54E648}.Release|Any CPU.ActiveCfg = Release|x64
+		{FC238033-DEE2-34FD-8294-00916C54E648}.Release|x64.ActiveCfg = Release|x64
+		{FC238033-DEE2-34FD-8294-00916C54E648}.Release|x64.Build.0 = Release|x64
+		{FC238033-DEE2-34FD-8294-00916C54E648}.RelWithDebInfo|Any CPU.ActiveCfg = RelWithDebInfo|x64
+		{FC238033-DEE2-34FD-8294-00916C54E648}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
+		{FC238033-DEE2-34FD-8294-00916C54E648}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

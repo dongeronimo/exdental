@@ -9,9 +9,12 @@
 #include <vtkVolumeProperty.h>
 #include <vtkImageResliceMapper.h>
 #include <vtkImageProperty.h>
+
 #include <vtkImageSlice.h>
 using namespace std;
 using namespace imageLoader;
+
+
 namespace pipeline
 {
 	class SubPipelinePlanar
@@ -48,12 +51,17 @@ namespace pipeline
 	class Pipeline
 	{
 	private:
+		typedef  void (_stdcall *GpuAnisotropicFilterDelegate)(itk::Image<short, 3>::Pointer input, itk::Image<short, 3>::Pointer output);
+		HINSTANCE hDllHandle;
 		unique_ptr<SubPipelinePlanar> pipelineDoPlano;
 		unique_ptr<SubPipelineVR> pipelineDoVR;
 		shared_ptr<LoadedImage> imagem;
+		ShortImage::Pointer imagemPosSuavizacao;
 		vtkSmartPointer<vtkImageImport> finalImage;
+		GpuAnisotropicFilterDelegate GpuAnisotropicDelegate;
 		void CreateFinalImageFromShort(ShortImage::Pointer src);
 	public:
+		~Pipeline();
 		Pipeline(shared_ptr<LoadedImage> img);
 		vtkSmartPointer<vtkImageSlice> GetPlanarActor()
 		{

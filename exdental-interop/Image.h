@@ -2,6 +2,7 @@
 #include <ImageLoader.h>
 #include <Pipeline.h>
 #include <memory>
+#include "ImageNativeData.h"
 using namespace std;
 namespace geronimo
 {

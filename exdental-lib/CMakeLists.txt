@@ -17,10 +17,16 @@ add_library(exdental-lib ${my_source_files} )
 target_link_libraries(exdental-lib  ${VTK_LIBRARIES} ${ITK_LIBRARIES})
 #bota minhas bibliotecas:
 #o carregador de imagens 3d
-add_subdirectory(C:/src/myItkImageLoader  C:/libs/myItkImageLoader) #C:\libs\myItkImageLoader
+add_subdirectory(C:/src/myItkImageLoader  C:/libs/myItkImageLoader)
 include_directories(${myItkImageLoader_INCLUDE_DIRS})
 target_link_libraries(exdental-lib myItkImageLoader)
+#o modulo de GPU, separado do executável principal por questões de compatibilidade entre o 
+#opencl e o c++/cli
+include_directories(C:/src/exdental/exdental-opencl-module)
+#O speed log (https://github.com/gabime/spdlog)
+include_directories(C:/libs/spdlog/include/spdlog)
 
+#suprime o warning chato dos infernos que a ITK gera por usar funções inseguras da api do windows
 add_definitions(-D_SCL_SECURE_NO_WARNINGS)
 
 
