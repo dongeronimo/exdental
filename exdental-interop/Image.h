@@ -21,5 +21,6 @@ namespace geronimo
 		Image(shared_ptr<imageLoader::LoadedImage> img);
 		~Image();
 		shared_ptr<pipeline::Pipeline> GetPipeline() { return data->pipe; }
+		void AplicarSuavizacao(int iterations, double timestep, double conductance);
 	};
 }
