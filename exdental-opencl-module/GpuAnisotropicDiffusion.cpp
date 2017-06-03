@@ -1,13 +1,21 @@
 #include "GpuAnisotropicDiffusion.h"
 
-void _stdcall ExecuteAnistropicDiffusion(itk::Image<short, 3>::Pointer input, itk::Image<short, 3>::Pointer output)
+void _stdcall ExecuteAnistropicDiffusion(itk::Image<short, 3>::Pointer input, 
+	int numberOfIterations, double timeStep, double conductanceParameter, 
+	itk::Image<short, 3>::Pointer output)
 {
+	if (numberOfIterations < 1)
+		throw std::invalid_argument("interações não podem ser ");
+	if (timeStep < 0)
+		throw std::invalid_argument("timestep não pode ser menor que 0");
+	if (conductanceParameter < 0)
+		throw std::invalid_argument("conductante não pode ser menor que 0");
 	GPUAnisoDiffFilterType::Pointer GPUFilter = GPUAnisoDiffFilterType::New();
-	GPUFilter->DebugOn();
+	//GPUFilter->DebugOn();
 	GPUFilter->SetInput(input);
-	GPUFilter->SetNumberOfIterations(10);
-	GPUFilter->SetTimeStep(0.01);
-	GPUFilter->SetConductanceParameter(3.0);
+	GPUFilter->SetNumberOfIterations(numberOfIterations);
+	GPUFilter->SetTimeStep(timeStep);
+	GPUFilter->SetConductanceParameter(conductanceParameter);
 	GPUFilter->UseImageSpacingOn();
 	GPUFilter->Update();
 	GPUFilter->GetOutput()->UpdateBuffers(); // synchronization point

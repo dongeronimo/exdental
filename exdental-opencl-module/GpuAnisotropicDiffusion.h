@@ -8,5 +8,7 @@ typedef itk::GPUGradientAnisotropicDiffusionImageFilter< itk::Image<short, 3>, G
 #define LIBRARY_API __declspec(dllexport) 
 extern "C"
 {
-	LIBRARY_API void _stdcall ExecuteAnistropicDiffusion(itk::Image<short, 3>::Pointer input, itk::Image<short, 3>::Pointer output);
+	LIBRARY_API void _stdcall ExecuteAnistropicDiffusion(itk::Image<short, 3>::Pointer input, 
+		int numberOfIterations, double timeStep, double conductanceParameter,
+		itk::Image<short, 3>::Pointer output);
 }
