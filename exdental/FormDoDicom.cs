@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using geronimo;
 using System.Diagnostics;
+using System.Globalization;
+using System.Threading;
+
 //TODO: Saida do VR
 //TODO: Filtros na imagem
 //TODO: Hough transform
@@ -128,5 +131,16 @@ namespace exdental
         {
 
         }
+
+        private void btnAplicarGpuSmooth_Click(object sender, EventArgs e)
+        {
+            int _gpuIteracoes = Int32.Parse(edtGpuSmoothIterations.Text);
+            double _gpuTS = Double.Parse(edtGpuSmoothTimestep.Text, new CultureInfo("en-US"));
+            double _gpuConductance = Double.Parse(edtGpuSmoothConductance.Text, new CultureInfo("en-US"));
+            image.AplicarSuavizacao(_gpuIteracoes, _gpuTS, _gpuConductance);
+            panelRenderizacao.Refresh();
+            panelVr.Refresh();
+        }
     }
 }
+
