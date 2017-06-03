@@ -5,6 +5,7 @@
 
 pipeline::SubPipelinePlanar::SubPipelinePlanar(vtkSmartPointer<vtkImageImport> img)
 {
+	this->importedImage = img;
 	resliceMapper = vtkSmartPointer<vtkImageResliceMapper>::New();
 	resliceMapper->SetInputConnection(img->GetOutputPort());
 	resliceMapper->SliceFacesCameraOn();
@@ -22,8 +23,16 @@ pipeline::SubPipelinePlanar::SubPipelinePlanar(vtkSmartPointer<vtkImageImport> i
 	resliceActor->SetProperty(resliceProperties);
 }
 
+void pipeline::SubPipelinePlanar::Update()
+{
+	importedImage->Update();
+	resliceMapper->Update();
+	resliceActor->Update();
+}
+
 pipeline::SubPipelineVR::SubPipelineVR(vtkSmartPointer<vtkImageImport> img)
 {
+	this->importedImage = img;
 	vrMapper = vtkSmartPointer<vtkGPUVolumeRayCastMapper>::New();
 	vrMapper->SetMaxMemoryFraction(0.9);
 	vrMapper->SetInputConnection(img->GetOutputPort());
@@ -43,6 +52,13 @@ pipeline::SubPipelineVR::SubPipelineVR(vtkSmartPointer<vtkImageImport> img)
 	vrActor = vtkSmartPointer<vtkVolume>::New();
 	vrActor->SetProperty(vrProperty);
 	vrActor->SetMapper(vrMapper);
+}
+
+void pipeline::SubPipelineVR::Update()
+{
+	importedImage->Update();
+	vrMapper->Update();
+	vrActor->Update();
 }
 
 void pipeline::Pipeline::CreateFinalImageFromShort(ShortImage::Pointer src)
@@ -66,7 +82,7 @@ void pipeline::Pipeline::CreateFinalImageFromShort(ShortImage::Pointer src)
 	finalImage->SetDataScalarTypeToShort();
 	void* srcPtr = src->GetBufferPointer();
 	finalImage->SetImportVoidPointer(srcPtr, 1);
-
+	finalImage->Modified();
 	finalImage->Update();
 }
 
@@ -74,6 +90,8 @@ pipeline::Pipeline::~Pipeline()
 {
 	FreeLibrary(hDllHandle);
 }
+
+
 
 pipeline::Pipeline::Pipeline(shared_ptr<LoadedImage> img)
 {
@@ -86,8 +104,16 @@ pipeline::Pipeline::Pipeline(shared_ptr<LoadedImage> img)
 	finalImage = nullptr;
 	this->imagem = img;
 	imagemPosSuavizacao = ShortImage::New();
-	GpuAnisotropicDelegate(imagem->GetImage(), imagemPosSuavizacao);
+	GpuAnisotropicDelegate(imagem->GetImage(),5,0.0125,3, imagemPosSuavizacao);
 	CreateFinalImageFromShort(imagemPosSuavizacao);
 	pipelineDoPlano = make_unique<SubPipelinePlanar>(finalImage);
 	pipelineDoVR = make_unique<SubPipelineVR>(finalImage);
+}
+
+void pipeline::Pipeline::Suavizacao(int iterations, double timestep, double conductance)
+{
+	GpuAnisotropicDelegate(imagem->GetImage(), iterations, timestep, conductance, imagemPosSuavizacao);
+	CreateFinalImageFromShort(imagemPosSuavizacao);
+	pipelineDoPlano->Update();
+	pipelineDoVR->Update();
 }

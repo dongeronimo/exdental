@@ -31,6 +31,7 @@ namespace pipeline
 		{
 			return resliceActor;
 		}
+		void Update();
 	};
 
 	class SubPipelineVR
@@ -42,6 +43,7 @@ namespace pipeline
 		vtkSmartPointer<vtkVolume> vrActor;
 	public:
 		SubPipelineVR(vtkSmartPointer<vtkImageImport> img);
+		void Update();
 		vtkSmartPointer<vtkVolume> GetActor()
 		{
 			return vrActor;
@@ -51,7 +53,9 @@ namespace pipeline
 	class Pipeline
 	{
 	private:
-		typedef  void (_stdcall *GpuAnisotropicFilterDelegate)(itk::Image<short, 3>::Pointer input, itk::Image<short, 3>::Pointer output);
+		typedef  void (_stdcall *GpuAnisotropicFilterDelegate)(itk::Image<short, 3>::Pointer input, 
+			int numberOfIterations, double timeStep, double conductanceParameter,
+			itk::Image<short, 3>::Pointer output);
 		HINSTANCE hDllHandle;
 		unique_ptr<SubPipelinePlanar> pipelineDoPlano;
 		unique_ptr<SubPipelineVR> pipelineDoVR;
@@ -71,5 +75,6 @@ namespace pipeline
 		{
 			return pipelineDoVR->GetActor();
 		}
+		void Suavizacao(int iterations, double timestep, double conductance);
 	};
 }
