@@ -32,28 +32,27 @@
             this.buttonAbrir = new System.Windows.Forms.Button();
             this.textBoxPath = new System.Windows.Forms.TextBox();
             this.panelRenderizacao = new System.Windows.Forms.Panel();
-            this.panelInferior = new System.Windows.Forms.Panel();
+            this.panelVr = new System.Windows.Forms.Panel();
+            this.panelFiltros = new System.Windows.Forms.Panel();
+            this.panelPropriedadesGPU = new System.Windows.Forms.Panel();
+            this.btnAplicarGpuSmooth = new System.Windows.Forms.Button();
+            this.edtGpuSmoothConductance = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.edtGpuSmoothTimestep = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.edtGpuSmoothIterations = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.txtLevel = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtWindow = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.panelVr = new System.Windows.Forms.Panel();
-            this.panelFiltros = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.panelPropriedadesGPU = new System.Windows.Forms.Panel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.edtGpuSmoothIterations = new System.Windows.Forms.TextBox();
-            this.edtGpuSmoothTimestep = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.edtGpuSmoothConductance = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.btnAplicarGpuSmooth = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
             this.panelSuperior.SuspendLayout();
-            this.panelInferior.SuspendLayout();
             this.panelFiltros.SuspendLayout();
             this.panelPropriedadesGPU.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelSuperior
@@ -86,93 +85,33 @@
             // panelRenderizacao
             // 
             this.panelRenderizacao.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.panelRenderizacao.Location = new System.Drawing.Point(268, 36);
+            this.panelRenderizacao.Location = new System.Drawing.Point(237, 35);
             this.panelRenderizacao.Name = "panelRenderizacao";
-            this.panelRenderizacao.Size = new System.Drawing.Size(422, 417);
+            this.panelRenderizacao.Size = new System.Drawing.Size(402, 383);
             this.panelRenderizacao.TabIndex = 1;
             this.panelRenderizacao.Paint += new System.Windows.Forms.PaintEventHandler(this.panelRenderizacao_Paint);
             // 
-            // panelInferior
-            // 
-            this.panelInferior.Controls.Add(this.txtLevel);
-            this.panelInferior.Controls.Add(this.label2);
-            this.panelInferior.Controls.Add(this.txtWindow);
-            this.panelInferior.Controls.Add(this.label1);
-            this.panelInferior.Controls.Add(this.progressBar);
-            this.panelInferior.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelInferior.Location = new System.Drawing.Point(0, 459);
-            this.panelInferior.Name = "panelInferior";
-            this.panelInferior.Size = new System.Drawing.Size(1022, 29);
-            this.panelInferior.TabIndex = 2;
-            // 
-            // txtLevel
-            // 
-            this.txtLevel.Location = new System.Drawing.Point(428, 4);
-            this.txtLevel.Name = "txtLevel";
-            this.txtLevel.Size = new System.Drawing.Size(100, 20);
-            this.txtLevel.TabIndex = 3;
-            this.txtLevel.TextChanged += new System.EventHandler(this.txtLevel_TextChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(393, 7);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "level";
-            // 
-            // txtWindow
-            // 
-            this.txtWindow.Location = new System.Drawing.Point(280, 4);
-            this.txtWindow.Name = "txtWindow";
-            this.txtWindow.Size = new System.Drawing.Size(100, 20);
-            this.txtWindow.TabIndex = 1;
-            this.txtWindow.TextChanged += new System.EventHandler(this.txtWindow_TextChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(238, 7);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "window";
-            // 
-            // progressBar
-            // 
-            this.progressBar.Location = new System.Drawing.Point(0, 3);
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(232, 23);
-            this.progressBar.TabIndex = 0;
-            // 
             // panelVr
             // 
-            this.panelVr.Location = new System.Drawing.Point(696, 35);
-            this.panelVr.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelVr.Location = new System.Drawing.Point(644, 34);
+            this.panelVr.Margin = new System.Windows.Forms.Padding(2);
             this.panelVr.Name = "panelVr";
-            this.panelVr.Size = new System.Drawing.Size(397, 418);
+            this.panelVr.Size = new System.Drawing.Size(367, 384);
             this.panelVr.TabIndex = 3;
             // 
             // panelFiltros
             // 
+            this.panelFiltros.Controls.Add(this.panel1);
+            this.panelFiltros.Controls.Add(this.txtLevel);
+            this.panelFiltros.Controls.Add(this.label2);
+            this.panelFiltros.Controls.Add(this.txtWindow);
+            this.panelFiltros.Controls.Add(this.label1);
             this.panelFiltros.Controls.Add(this.panelPropriedadesGPU);
-            this.panelFiltros.Controls.Add(this.button1);
             this.panelFiltros.Location = new System.Drawing.Point(0, 35);
-            this.panelFiltros.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelFiltros.Margin = new System.Windows.Forms.Padding(2);
             this.panelFiltros.Name = "panelFiltros";
-            this.panelFiltros.Size = new System.Drawing.Size(263, 418);
+            this.panelFiltros.Size = new System.Drawing.Size(232, 383);
             this.panelFiltros.TabIndex = 4;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(87, 110);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(56, 19);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // panelPropriedadesGPU
             // 
@@ -186,51 +125,19 @@
             this.panelPropriedadesGPU.Controls.Add(this.label3);
             this.panelPropriedadesGPU.Location = new System.Drawing.Point(0, 4);
             this.panelPropriedadesGPU.Name = "panelPropriedadesGPU";
-            this.panelPropriedadesGPU.Size = new System.Drawing.Size(260, 100);
+            this.panelPropriedadesGPU.Size = new System.Drawing.Size(232, 92);
             this.panelPropriedadesGPU.TabIndex = 2;
             // 
-            // label3
+            // btnAplicarGpuSmooth
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(11, 4);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(118, 13);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Suavização Anistrópica";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(14, 21);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(50, 13);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "iterações";
-            // 
-            // edtGpuSmoothIterations
-            // 
-            this.edtGpuSmoothIterations.Location = new System.Drawing.Point(87, 21);
-            this.edtGpuSmoothIterations.Name = "edtGpuSmoothIterations";
-            this.edtGpuSmoothIterations.Size = new System.Drawing.Size(100, 20);
-            this.edtGpuSmoothIterations.TabIndex = 2;
-            this.edtGpuSmoothIterations.Text = "5";
-            // 
-            // edtGpuSmoothTimestep
-            // 
-            this.edtGpuSmoothTimestep.Location = new System.Drawing.Point(87, 43);
-            this.edtGpuSmoothTimestep.Name = "edtGpuSmoothTimestep";
-            this.edtGpuSmoothTimestep.Size = new System.Drawing.Size(100, 20);
-            this.edtGpuSmoothTimestep.TabIndex = 4;
-            this.edtGpuSmoothTimestep.Text = "0.0125";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(14, 43);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(49, 13);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "time step";
+            this.btnAplicarGpuSmooth.Location = new System.Drawing.Point(176, 4);
+            this.btnAplicarGpuSmooth.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAplicarGpuSmooth.Name = "btnAplicarGpuSmooth";
+            this.btnAplicarGpuSmooth.Size = new System.Drawing.Size(56, 19);
+            this.btnAplicarGpuSmooth.TabIndex = 7;
+            this.btnAplicarGpuSmooth.Text = "aplicar";
+            this.btnAplicarGpuSmooth.UseVisualStyleBackColor = true;
+            this.btnAplicarGpuSmooth.Click += new System.EventHandler(this.btnAplicarGpuSmooth_Click);
             // 
             // edtGpuSmoothConductance
             // 
@@ -249,25 +156,105 @@
             this.label6.TabIndex = 5;
             this.label6.Text = "conductance";
             // 
-            // btnAplicarGpuSmooth
+            // edtGpuSmoothTimestep
             // 
-            this.btnAplicarGpuSmooth.Location = new System.Drawing.Point(202, 4);
-            this.btnAplicarGpuSmooth.Margin = new System.Windows.Forms.Padding(2);
-            this.btnAplicarGpuSmooth.Name = "btnAplicarGpuSmooth";
-            this.btnAplicarGpuSmooth.Size = new System.Drawing.Size(56, 19);
-            this.btnAplicarGpuSmooth.TabIndex = 7;
-            this.btnAplicarGpuSmooth.Text = "aplicar";
-            this.btnAplicarGpuSmooth.UseVisualStyleBackColor = true;
-            this.btnAplicarGpuSmooth.Click += new System.EventHandler(this.btnAplicarGpuSmooth_Click);
+            this.edtGpuSmoothTimestep.Location = new System.Drawing.Point(87, 43);
+            this.edtGpuSmoothTimestep.Name = "edtGpuSmoothTimestep";
+            this.edtGpuSmoothTimestep.Size = new System.Drawing.Size(100, 20);
+            this.edtGpuSmoothTimestep.TabIndex = 4;
+            this.edtGpuSmoothTimestep.Text = "0.0125";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(14, 43);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(49, 13);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "time step";
+            // 
+            // edtGpuSmoothIterations
+            // 
+            this.edtGpuSmoothIterations.Location = new System.Drawing.Point(87, 21);
+            this.edtGpuSmoothIterations.Name = "edtGpuSmoothIterations";
+            this.edtGpuSmoothIterations.Size = new System.Drawing.Size(100, 20);
+            this.edtGpuSmoothIterations.TabIndex = 2;
+            this.edtGpuSmoothIterations.Text = "5";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(14, 21);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(50, 13);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "iterações";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(11, 4);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(118, 13);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Suavização Anistrópica";
+            // 
+            // txtLevel
+            // 
+            this.txtLevel.Location = new System.Drawing.Point(52, 356);
+            this.txtLevel.Name = "txtLevel";
+            this.txtLevel.Size = new System.Drawing.Size(100, 20);
+            this.txtLevel.TabIndex = 7;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 359);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(29, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "level";
+            // 
+            // txtWindow
+            // 
+            this.txtWindow.Location = new System.Drawing.Point(52, 330);
+            this.txtWindow.Name = "txtWindow";
+            this.txtWindow.Size = new System.Drawing.Size(100, 20);
+            this.txtWindow.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 329);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(43, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "window";
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.label7);
+            this.panel1.Location = new System.Drawing.Point(0, 103);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(229, 100);
+            this.panel1.TabIndex = 8;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(14, 4);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(50, 13);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "Sigmoide";
             // 
             // formDoDicom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1022, 488);
+            this.ClientSize = new System.Drawing.Size(1022, 425);
             this.Controls.Add(this.panelFiltros);
             this.Controls.Add(this.panelVr);
-            this.Controls.Add(this.panelInferior);
             this.Controls.Add(this.panelRenderizacao);
             this.Controls.Add(this.panelSuperior);
             this.Name = "formDoDicom";
@@ -278,11 +265,12 @@
             this.Resize += new System.EventHandler(this.formDoDicom_Resize);
             this.panelSuperior.ResumeLayout(false);
             this.panelSuperior.PerformLayout();
-            this.panelInferior.ResumeLayout(false);
-            this.panelInferior.PerformLayout();
             this.panelFiltros.ResumeLayout(false);
+            this.panelFiltros.PerformLayout();
             this.panelPropriedadesGPU.ResumeLayout(false);
             this.panelPropriedadesGPU.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -291,17 +279,10 @@
 
         private System.Windows.Forms.Panel panelSuperior;
         private System.Windows.Forms.Panel panelRenderizacao;
-        private System.Windows.Forms.Panel panelInferior;
         private System.Windows.Forms.Button buttonAbrir;
         private System.Windows.Forms.TextBox textBoxPath;
-        private System.Windows.Forms.ProgressBar progressBar;
-        private System.Windows.Forms.TextBox txtLevel;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtWindow;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panelVr;
         private System.Windows.Forms.Panel panelFiltros;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panelPropriedadesGPU;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
@@ -311,6 +292,12 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox edtGpuSmoothIterations;
         private System.Windows.Forms.Button btnAplicarGpuSmooth;
+        private System.Windows.Forms.TextBox txtLevel;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txtWindow;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label7;
     }
 }
 

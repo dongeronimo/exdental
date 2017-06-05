@@ -9,6 +9,8 @@
 #include <vtkVolumeProperty.h>
 #include <vtkImageResliceMapper.h>
 #include <vtkImageProperty.h>
+#include <itkSigmoidImageFilter.h>
+#include <itkCastImageFilter.h>
 
 #include <vtkImageSlice.h>
 using namespace std;
@@ -53,6 +55,11 @@ namespace pipeline
 	class Pipeline
 	{
 	private:
+		typedef itk::CastImageFilter<itk::Image<short, 3>, itk::Image<float, 3>> ShortToFloatImageFilter;
+		typedef itk::SigmoidImageFilter<itk::Image<float, 3>, itk::Image<short, 3>> SigmoidFilter;
+		typedef itk::CastImageFilter<itk::Image<float, 3>, itk::Image<short, 3>> FloatToShortImageFilter;
+		
+
 		typedef  void (_stdcall *GpuAnisotropicFilterDelegate)(itk::Image<short, 3>::Pointer input, 
 			int numberOfIterations, double timeStep, double conductanceParameter,
 			itk::Image<short, 3>::Pointer output);
@@ -63,6 +70,11 @@ namespace pipeline
 		ShortImage::Pointer imagemPosSuavizacao;
 		vtkSmartPointer<vtkImageImport> finalImage;
 		GpuAnisotropicFilterDelegate GpuAnisotropicDelegate;
+
+		ShortToFloatImageFilter::Pointer shortToFloat;
+		SigmoidFilter::Pointer sigmoid;
+		FloatToShortImageFilter::Pointer floatToShort;
+
 		void CreateFinalImageFromShort(ShortImage::Pointer src);
 	public:
 		~Pipeline();

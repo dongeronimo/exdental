@@ -105,6 +105,7 @@ pipeline::Pipeline::Pipeline(shared_ptr<LoadedImage> img)
 	this->imagem = img;
 	imagemPosSuavizacao = ShortImage::New();
 	GpuAnisotropicDelegate(imagem->GetImage(),5,0.0125,3, imagemPosSuavizacao);
+	
 	CreateFinalImageFromShort(imagemPosSuavizacao);
 	pipelineDoPlano = make_unique<SubPipelinePlanar>(finalImage);
 	pipelineDoVR = make_unique<SubPipelineVR>(finalImage);
