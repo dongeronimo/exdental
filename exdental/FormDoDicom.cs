@@ -141,6 +141,11 @@ namespace exdental
             panelRenderizacao.Refresh();
             panelVr.Refresh();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            image.SalvarParaOVolview("C:\\Users\\geronimo\\dicom\\artefato_maxilar.vti");
+        }
     }
 }
 

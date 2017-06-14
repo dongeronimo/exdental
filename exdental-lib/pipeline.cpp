@@ -26,7 +26,7 @@ pipeline::SubPipelinePlanar::SubPipelinePlanar(vtkSmartPointer<vtkImageImport> i
 void pipeline::SubPipelinePlanar::Update()
 {
 	importedImage->Update();
-	resliceMapper->Update();
+	//resliceMapper->Update();
 	resliceActor->Update();
 }
 

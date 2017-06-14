@@ -1,8 +1,22 @@
 #pragma once
+#include <Windows.h>
 #include <ImageLoader.h>
 #include <Pipeline.h>
 #include <memory>
 #include "ImageNativeData.h"
+#include <Windows.h>
+#using <WindowsBase.dll>
+#using <mscorlib.dll> 
+#using <System.dll> 
+#using <System.Windows.Forms.dll> 
+#include <msclr\marshal_cppstd.h>
+#include <ImageLoader.h>
+#include <ImageLoader.h>
+#include <vector>
+#include "Image.h"
+using namespace System;
+using namespace System::Collections::Generic;
+using namespace System::Windows::Forms;
 using namespace std;
 namespace geronimo
 {
@@ -22,5 +36,6 @@ namespace geronimo
 		~Image();
 		shared_ptr<pipeline::Pipeline> GetPipeline() { return data->pipe; }
 		void AplicarSuavizacao(int iterations, double timestep, double conductance);
+		void SalvarParaOVolview(String^ file);
 	};
 }

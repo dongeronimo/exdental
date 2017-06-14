@@ -34,6 +34,12 @@
             this.panelRenderizacao = new System.Windows.Forms.Panel();
             this.panelVr = new System.Windows.Forms.Panel();
             this.panelFiltros = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txtLevel = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtWindow = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.panelPropriedadesGPU = new System.Windows.Forms.Panel();
             this.btnAplicarGpuSmooth = new System.Windows.Forms.Button();
             this.edtGpuSmoothConductance = new System.Windows.Forms.TextBox();
@@ -43,20 +49,16 @@
             this.edtGpuSmoothIterations = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.txtLevel = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtWindow = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label7 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.panelSuperior.SuspendLayout();
             this.panelFiltros.SuspendLayout();
-            this.panelPropriedadesGPU.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panelPropriedadesGPU.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelSuperior
             // 
+            this.panelSuperior.Controls.Add(this.button1);
             this.panelSuperior.Controls.Add(this.buttonAbrir);
             this.panelSuperior.Controls.Add(this.textBoxPath);
             this.panelSuperior.Dock = System.Windows.Forms.DockStyle.Top;
@@ -112,6 +114,55 @@
             this.panelFiltros.Name = "panelFiltros";
             this.panelFiltros.Size = new System.Drawing.Size(232, 383);
             this.panelFiltros.TabIndex = 4;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.label7);
+            this.panel1.Location = new System.Drawing.Point(0, 103);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(229, 100);
+            this.panel1.TabIndex = 8;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(14, 4);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(50, 13);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "Sigmoide";
+            // 
+            // txtLevel
+            // 
+            this.txtLevel.Location = new System.Drawing.Point(52, 356);
+            this.txtLevel.Name = "txtLevel";
+            this.txtLevel.Size = new System.Drawing.Size(100, 20);
+            this.txtLevel.TabIndex = 7;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 359);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(29, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "level";
+            // 
+            // txtWindow
+            // 
+            this.txtWindow.Location = new System.Drawing.Point(52, 330);
+            this.txtWindow.Name = "txtWindow";
+            this.txtWindow.Size = new System.Drawing.Size(100, 20);
+            this.txtWindow.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 329);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(43, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "window";
             // 
             // panelPropriedadesGPU
             // 
@@ -199,54 +250,15 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Suavização Anistrópica";
             // 
-            // txtLevel
+            // button1
             // 
-            this.txtLevel.Location = new System.Drawing.Point(52, 356);
-            this.txtLevel.Name = "txtLevel";
-            this.txtLevel.Size = new System.Drawing.Size(100, 20);
-            this.txtLevel.TabIndex = 7;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 359);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 13);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "level";
-            // 
-            // txtWindow
-            // 
-            this.txtWindow.Location = new System.Drawing.Point(52, 330);
-            this.txtWindow.Name = "txtWindow";
-            this.txtWindow.Size = new System.Drawing.Size(100, 20);
-            this.txtWindow.TabIndex = 5;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 329);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 13);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "window";
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.label7);
-            this.panel1.Location = new System.Drawing.Point(0, 103);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(229, 100);
-            this.panel1.TabIndex = 8;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(14, 4);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(50, 13);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "Sigmoide";
+            this.button1.Location = new System.Drawing.Point(565, 0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(149, 23);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "Salvar pro volview entender";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // formDoDicom
             // 
@@ -267,10 +279,10 @@
             this.panelSuperior.PerformLayout();
             this.panelFiltros.ResumeLayout(false);
             this.panelFiltros.PerformLayout();
-            this.panelPropriedadesGPU.ResumeLayout(false);
-            this.panelPropriedadesGPU.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panelPropriedadesGPU.ResumeLayout(false);
+            this.panelPropriedadesGPU.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -298,6 +310,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button button1;
     }
 }
 
