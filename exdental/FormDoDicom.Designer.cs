@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.panelSuperior = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.buttonAbrir = new System.Windows.Forms.Button();
             this.textBoxPath = new System.Windows.Forms.TextBox();
             this.panelRenderizacao = new System.Windows.Forms.Panel();
@@ -49,7 +51,6 @@
             this.edtGpuSmoothIterations = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.panelSuperior.SuspendLayout();
             this.panelFiltros.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -58,6 +59,7 @@
             // 
             // panelSuperior
             // 
+            this.panelSuperior.Controls.Add(this.button2);
             this.panelSuperior.Controls.Add(this.button1);
             this.panelSuperior.Controls.Add(this.buttonAbrir);
             this.panelSuperior.Controls.Add(this.textBoxPath);
@@ -66,6 +68,26 @@
             this.panelSuperior.Name = "panelSuperior";
             this.panelSuperior.Size = new System.Drawing.Size(1022, 29);
             this.panelSuperior.TabIndex = 0;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(721, 0);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(125, 23);
+            this.button2.TabIndex = 3;
+            this.button2.Text = "abertura alternativa";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(565, 0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(149, 23);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "Salvar pro volview entender";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // buttonAbrir
             // 
@@ -250,16 +272,6 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Suavização Anistrópica";
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(565, 0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(149, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Salvar pro volview entender";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // formDoDicom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -311,6 +323,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
 

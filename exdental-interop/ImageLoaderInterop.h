@@ -36,5 +36,6 @@ namespace geronimo
 		ImageLoader();
 		~ImageLoader();
 		Image^ GetImage() { return imagem; }
+		void LoadVTI(String^ filename);
 	};
 }

@@ -8,6 +8,14 @@ using namespace std;
 
 namespace geronimo
 {
+	void ImageLoader::LoadVTI(String^ filename)
+	{
+		std::string arq = msclr::interop::marshal_as<std::string>(filename);
+		std::string n = "noexam";
+		imageLoader::ImageLoader loader;
+		imagem = gcnew Image(loader.LoadVTI(arq, n, n));
+	}
+
 	ImageLoader::ImageLoader()
 	{
 		data = new ImageLoaderNativeData();

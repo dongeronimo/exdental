@@ -146,6 +146,21 @@ namespace exdental
         {
             image.SalvarParaOVolview("C:\\Users\\geronimo\\dicom\\artefato_maxilar.vti");
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            loader = new ImageLoader();
+            loader.LoadVTI("C:\\Users\\geronimo\\dicom\\artefato_maxilar.vti");
+            image = loader.GetImage();//A partir daqui não preciso mais do loader, já tenho 
+            //o que quero.
+            telaRadiografia = new TelaRadiografia();
+            telaRadiografia.CreateScreen(panelRenderizacao);
+            telaRadiografia.SetImagem(image);
+            telaVr = new TelaVR();
+            telaVr.CreateScreen(panelVr);
+            telaVr.SetImagem(image);
+            loader.Dispose();
+        }
     }
 }
 
