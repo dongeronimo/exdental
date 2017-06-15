@@ -93,8 +93,9 @@ pipeline::Pipeline::~Pipeline()
 
 
 
-pipeline::Pipeline::Pipeline(shared_ptr<LoadedImage> img)
+pipeline::Pipeline::Pipeline(shared_ptr<LoadedImage> img, HWND progressBarWindow)
 {
+	this->progressBarWindowHandle = progressBarWindow;
 	hDllHandle = LoadLibrary("exdental-opencl-module.dll");
 	if (!hDllHandle)
 		throw std::exception("dll não encontrada.");
@@ -104,7 +105,7 @@ pipeline::Pipeline::Pipeline(shared_ptr<LoadedImage> img)
 	finalImage = nullptr;
 	this->imagem = img;
 	imagemPosSuavizacao = ShortImage::New();
-	GpuAnisotropicDelegate(imagem->GetImage(),5,0.0125,3, imagemPosSuavizacao);
+	GpuAnisotropicDelegate(imagem->GetImage(),5,0.0125,3, imagemPosSuavizacao, progressBarWindowHandle);
 	
 	CreateFinalImageFromShort(imagemPosSuavizacao);
 	pipelineDoPlano = make_unique<SubPipelinePlanar>(finalImage);
@@ -113,7 +114,7 @@ pipeline::Pipeline::Pipeline(shared_ptr<LoadedImage> img)
 
 void pipeline::Pipeline::Suavizacao(int iterations, double timestep, double conductance)
 {
-	GpuAnisotropicDelegate(imagem->GetImage(), iterations, timestep, conductance, imagemPosSuavizacao);
+	GpuAnisotropicDelegate(imagem->GetImage(), iterations, timestep, conductance, imagemPosSuavizacao, progressBarWindowHandle);
 	CreateFinalImageFromShort(imagemPosSuavizacao);
 	pipelineDoPlano->Update();
 	pipelineDoVR->Update();

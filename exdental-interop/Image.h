@@ -31,8 +31,9 @@ namespace geronimo
 	{
 	private:
 		ImageNativeData *data;
+		HWND windowWithTheProgressBarHandle;
 	public:
-		Image(shared_ptr<imageLoader::LoadedImage> img);
+		Image(shared_ptr<imageLoader::LoadedImage> img, HWND windowWithTheProgressBar);
 		~Image();
 		shared_ptr<pipeline::Pipeline> GetPipeline() { return data->pipe; }
 		void AplicarSuavizacao(int iterations, double timestep, double conductance);

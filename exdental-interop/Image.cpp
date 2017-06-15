@@ -13,11 +13,11 @@ namespace geronimo
 		//Suavizacao(int iterations, double timestep, double conductance)
 		data->pipe->Suavizacao(iterations, timestep, conductance);
 	}
-	Image::Image(shared_ptr<imageLoader::LoadedImage> img)
+	Image::Image(shared_ptr<imageLoader::LoadedImage> img, HWND windowWithTheProgressBar)
 	{
 		data = new ImageNativeData();
 		data->imagem = img;
-		data->pipe = make_shared<pipeline::Pipeline>(data->imagem);
+		data->pipe = make_shared<pipeline::Pipeline>(data->imagem, windowWithTheProgressBar);
 	}
 	Image::~Image()
 	{

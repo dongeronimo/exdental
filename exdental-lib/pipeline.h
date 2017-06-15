@@ -62,7 +62,7 @@ namespace pipeline
 
 		typedef  void (_stdcall *GpuAnisotropicFilterDelegate)(itk::Image<short, 3>::Pointer input, 
 			int numberOfIterations, double timeStep, double conductanceParameter,
-			itk::Image<short, 3>::Pointer output);
+			itk::Image<short, 3>::Pointer output, HWND progressObserverHandle);
 		HINSTANCE hDllHandle;
 		unique_ptr<SubPipelinePlanar> pipelineDoPlano;
 		unique_ptr<SubPipelineVR> pipelineDoVR;
@@ -74,11 +74,12 @@ namespace pipeline
 		ShortToFloatImageFilter::Pointer shortToFloat;
 		SigmoidFilter::Pointer sigmoid;
 		FloatToShortImageFilter::Pointer floatToShort;
+		HWND progressBarWindowHandle;
 
 		void CreateFinalImageFromShort(ShortImage::Pointer src);
 	public:
 		~Pipeline();
-		Pipeline(shared_ptr<LoadedImage> img);
+		Pipeline(shared_ptr<LoadedImage> img, HWND progressBarWindow);
 		vtkSmartPointer<vtkImageSlice> GetPlanarActor()
 		{
 			return pipelineDoPlano->GetActor();

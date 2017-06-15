@@ -13,7 +13,7 @@ namespace geronimo
 		std::string arq = msclr::interop::marshal_as<std::string>(filename);
 		std::string n = "noexam";
 		imageLoader::ImageLoader loader(windowHandle);
-		imagem = gcnew Image(loader.LoadVTI(arq, n, n));
+		imagem = gcnew Image(loader.LoadVTI(arq, n, n),windowHandle);
 	}
 
 	ImageLoader::ImageLoader(IntPtr progressEventTarget)
@@ -31,14 +31,14 @@ namespace geronimo
 	{
 		StringList slices = data->fatiasDasImagens[0];
 		imageLoader::ImageLoader loader(windowHandle);
-		imagem = gcnew Image(loader.Load(slices, "noexam", "noseries"));		
+		imagem = gcnew Image(loader.Load(slices, "noexam", "noseries"), windowHandle);
 	}
 
 	void ImageLoader::Load(int index)
 	{
 		StringList slices = data->fatiasDasImagens[index];
 		imageLoader::ImageLoader loader(windowHandle);
-		imagem = gcnew Image(loader.Load(slices, "noexam", "noseries"));
+		imagem = gcnew Image(loader.Load(slices, "noexam", "noseries"), windowHandle);
 	}
 
 	System::Collections::Generic::List<String^>^ ImageLoader::GetListaDeImagens(String^ dirpath)

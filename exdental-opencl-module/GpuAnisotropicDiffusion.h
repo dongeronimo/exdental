@@ -10,5 +10,5 @@ extern "C"
 {
 	LIBRARY_API void _stdcall ExecuteAnistropicDiffusion(itk::Image<short, 3>::Pointer input, 
 		int numberOfIterations, double timeStep, double conductanceParameter,
-		itk::Image<short, 3>::Pointer output);
+		itk::Image<short, 3>::Pointer output, HWND progressObserverHandle);
 }

@@ -103,6 +103,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;vtkDomainsChemistry_AUTOINIT=1(vtkDomainsChemistryOpenGL2);vtkRenderingContext2D_AUTOINIT=1(vtkRenderingContextOpenGL2);vtkRenderingCore_INCLUDE="C:/src/exdental/exdental-interop/CMakeFiles/vtkRenderingCore_AUTOINIT_vtkInteractionStyle_vtkRenderingFreeType_vtkRenderingOpenGL2.h";vtkRenderingVolume_AUTOINIT=1(vtkRenderingVolumeOpenGL2);ITK_IO_FACTORY_REGISTER_MANAGER;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR="Debug";exdental_interop_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;vtkDomainsChemistry_AUTOINIT=1(vtkDomainsChemistryOpenGL2);vtkRenderingContext2D_AUTOINIT=1(vtkRenderingContextOpenGL2);vtkRenderingCore_INCLUDE=\"C:/src/exdental/exdental-interop/CMakeFiles/vtkRenderingCore_AUTOINIT_vtkInteractionStyle_vtkRenderingFreeType_vtkRenderingOpenGL2.h\";vtkRenderingVolume_AUTOINIT=1(vtkRenderingVolumeOpenGL2);ITK_IO_FACTORY_REGISTER_MANAGER;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"Debug\";exdental_interop_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
