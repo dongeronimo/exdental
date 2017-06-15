@@ -27,13 +27,14 @@ namespace geronimo
 	{
 	private:
 		ImageLoaderNativeData *data;
+		HWND windowHandle;
 		Image ^imagem;
 	public:
 		//Retorna as série que existem do diretório na forma identifier;numero de fatias.
 		System::Collections::Generic::List<String^>^ ImageLoader::GetListaDeImagens(String^ dirpath);
 		void Load();
 		void Load(int index);
-		ImageLoader();
+		ImageLoader(IntPtr progressEventTarget);
 		~ImageLoader();
 		Image^ GetImage() { return imagem; }
 		void LoadVTI(String^ filename);

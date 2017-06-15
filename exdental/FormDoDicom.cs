@@ -31,7 +31,7 @@ namespace exdental
 
         private void buttonAbrir_Click(object sender, EventArgs e)
         {
-            loader = new ImageLoader();
+            loader = new ImageLoader(this.Handle);
             List<String> listaDeImagens = loader.GetListaDeImagens(textBoxPath.Text);
             if (listaDeImagens.Count == 0)
             {
@@ -96,9 +96,11 @@ namespace exdental
                     //    telaRadiografia.Resize(this.Size.Width, this.Size.Height);
                 }
             }
-            if (m.Msg == (2024))
+            if (m.Msg == (2024))//O Evento que progressObserver da itk e vtk geram:
             {
-                button3.Text = "recebeu o evento";
+                int progresso = m.WParam.ToInt32();
+                progressBar1.Value = progresso;
+                progressBar1.Refresh();
             }
             base.WndProc(ref m);
         }
@@ -153,7 +155,7 @@ namespace exdental
 
         private void button2_Click(object sender, EventArgs e)
         {
-            loader = new ImageLoader();
+            loader = new ImageLoader(this.Handle);
             loader.LoadVTI("C:\\Users\\geronimo\\dicom\\artefato_maxilar.vti");
             image = loader.GetImage();//A partir daqui não preciso mais do loader, já tenho 
             //o que quero.
@@ -168,7 +170,7 @@ namespace exdental
 
         private void button3_Click(object sender, EventArgs e)
         {
-            loader = new ImageLoader();
+            loader = new ImageLoader(this.Handle);
             loader.TesteEnvioDeEventoDeVoltaPraTela(this.Handle);
         }
     }
