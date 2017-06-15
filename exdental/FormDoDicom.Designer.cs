@@ -39,10 +39,6 @@
             this.panelFiltros = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
-            this.txtLevel = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtWindow = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.panelPropriedadesGPU = new System.Windows.Forms.Panel();
             this.btnAplicarGpuSmooth = new System.Windows.Forms.Button();
             this.edtGpuSmoothConductance = new System.Windows.Forms.TextBox();
@@ -139,10 +135,6 @@
             // panelFiltros
             // 
             this.panelFiltros.Controls.Add(this.panel1);
-            this.panelFiltros.Controls.Add(this.txtLevel);
-            this.panelFiltros.Controls.Add(this.label2);
-            this.panelFiltros.Controls.Add(this.txtWindow);
-            this.panelFiltros.Controls.Add(this.label1);
             this.panelFiltros.Controls.Add(this.panelPropriedadesGPU);
             this.panelFiltros.Location = new System.Drawing.Point(0, 35);
             this.panelFiltros.Margin = new System.Windows.Forms.Padding(2);
@@ -166,38 +158,6 @@
             this.label7.Size = new System.Drawing.Size(50, 13);
             this.label7.TabIndex = 0;
             this.label7.Text = "Sigmoide";
-            // 
-            // txtLevel
-            // 
-            this.txtLevel.Location = new System.Drawing.Point(52, 356);
-            this.txtLevel.Name = "txtLevel";
-            this.txtLevel.Size = new System.Drawing.Size(100, 20);
-            this.txtLevel.TabIndex = 7;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 359);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 13);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "level";
-            // 
-            // txtWindow
-            // 
-            this.txtWindow.Location = new System.Drawing.Point(52, 330);
-            this.txtWindow.Name = "txtWindow";
-            this.txtWindow.Size = new System.Drawing.Size(100, 20);
-            this.txtWindow.TabIndex = 5;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 329);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 13);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "window";
             // 
             // panelPropriedadesGPU
             // 
@@ -311,7 +271,6 @@
             this.panelSuperior.ResumeLayout(false);
             this.panelSuperior.PerformLayout();
             this.panelFiltros.ResumeLayout(false);
-            this.panelFiltros.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panelPropriedadesGPU.ResumeLayout(false);
@@ -337,10 +296,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox edtGpuSmoothIterations;
         private System.Windows.Forms.Button btnAplicarGpuSmooth;
-        private System.Windows.Forms.TextBox txtLevel;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtWindow;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button button1;

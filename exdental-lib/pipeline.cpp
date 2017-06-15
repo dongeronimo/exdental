@@ -95,7 +95,14 @@ pipeline::Pipeline::~Pipeline()
 
 pipeline::Pipeline::Pipeline(shared_ptr<LoadedImage> img, HWND progressBarWindow)
 {
+	sigmoidAlpha = 409;
+	sigmoidBeta = 1392;
+	sigmoidMin = 0.0;
+	sigmoidMax = 1000.0;
 	this->progressBarWindowHandle = progressBarWindow;
+	myITKProgressObserver = MyITKProgressEventSender::New();
+	((MyITKProgressEventSender*)(myITKProgressObserver.GetPointer()))->SetHWND(progressBarWindow);
+
 	hDllHandle = LoadLibrary("exdental-opencl-module.dll");
 	if (!hDllHandle)
 		throw std::exception("dll não encontrada.");
@@ -104,18 +111,57 @@ pipeline::Pipeline::Pipeline(shared_ptr<LoadedImage> img, HWND progressBarWindow
 		throw std::exception("ExecuteAnistropicDiffusion() não encontrada.");
 	finalImage = nullptr;
 	this->imagem = img;
+	//Filtro de suavização via GPU
 	imagemPosSuavizacao = ShortImage::New();
 	GpuAnisotropicDelegate(imagem->GetImage(),5,0.0125,3, imagemPosSuavizacao, progressBarWindowHandle);
-	
-	CreateFinalImageFromShort(imagemPosSuavizacao);
+	//Sigmóide
+	shortToFloat = ShortToFloatImageFilter::New();
+	sigmoid = SigmoidFilter::New();
+	floatToShort = FloatToShortImageFilter::New();
+	SetSigmoid(sigmoidAlpha, sigmoidBeta, sigmoidMin, sigmoidMax);
+	LinkFiltersAfterGPUSmooth();
+
+	CreateFinalImageFromShort(floatToShort->GetOutput());
 	pipelineDoPlano = make_unique<SubPipelinePlanar>(finalImage);
 	pipelineDoVR = make_unique<SubPipelineVR>(finalImage);
+	pipelineDoPlano->SetWL(500, 500);
+}
+
+void pipeline::Pipeline::LinkFiltersAfterGPUSmooth()
+{
+	shortToFloat->SetInput(imagemPosSuavizacao);
+	sigmoid->SetInput(shortToFloat->GetOutput());
+	floatToShort->SetInput(sigmoid->GetOutput());
+	floatToShort->Update();
+}
+
+void pipeline::Pipeline::SetSigmoid(short alpha, short beta, float min, float max)
+{
+	sigmoid->SetAlpha(alpha);
+	sigmoid->SetBeta(beta);
+	sigmoid->SetOutputMinimum(min);
+	sigmoid->SetOutputMaximum(max);
+}
+
+void pipeline::Pipeline::Sigmoide(short alpha, short beta, float min, float max)
+{
+	this->sigmoidAlpha = alpha;
+	this->sigmoidBeta = beta;
+	this->sigmoidMin = min;
+	this->sigmoidMax = max;
+	SetSigmoid(alpha, beta, min, max);
+	LinkFiltersAfterGPUSmooth();
+	CreateFinalImageFromShort(floatToShort->GetOutput());
+	pipelineDoPlano->Update();
+	pipelineDoVR->Update();
 }
 
 void pipeline::Pipeline::Suavizacao(int iterations, double timestep, double conductance)
 {
 	GpuAnisotropicDelegate(imagem->GetImage(), iterations, timestep, conductance, imagemPosSuavizacao, progressBarWindowHandle);
-	CreateFinalImageFromShort(imagemPosSuavizacao);
+	SetSigmoid(sigmoidAlpha, sigmoidBeta, sigmoidMin, sigmoidMax);
+	LinkFiltersAfterGPUSmooth();
+	CreateFinalImageFromShort(floatToShort->GetOutput());
 	pipelineDoPlano->Update();
 	pipelineDoVR->Update();
 }

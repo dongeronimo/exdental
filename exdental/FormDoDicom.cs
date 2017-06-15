@@ -107,30 +107,12 @@ namespace exdental
 
         private void txtWindow_TextChanged(object sender, EventArgs e)
         {
-            try
-            {
-                int w = Int32.Parse(txtWindow.Text);
-                int l = Int32.Parse(txtLevel.Text);
-                //telaRadiografia.SetWL(w, l);
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-            }
+
         }
 
         private void txtLevel_TextChanged(object sender, EventArgs e)
         {
-            try
-            {
-                int w = Int32.Parse(txtWindow.Text);
-                int l = Int32.Parse(txtLevel.Text);
-                //telaRadiografia.SetWL(w, l);
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-            }
+
         }
 
         private void panelRenderizacao_Paint(object sender, PaintEventArgs e)
@@ -172,6 +154,11 @@ namespace exdental
         {
             loader = new ImageLoader(this.Handle);
             loader.TesteEnvioDeEventoDeVoltaPraTela(this.Handle);
+        }
+
+        private void txtWindow_TextChanged_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
