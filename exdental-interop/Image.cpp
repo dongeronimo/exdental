@@ -12,14 +12,21 @@ namespace geronimo
 	{
 		data->pipe->Suavizacao(iterations, timestep, conductance);
 	}
+
 	Image::Image(shared_ptr<imageLoader::LoadedImage> img, HWND windowWithTheProgressBar)
 	{
 		data = new ImageNativeData();
 		data->imagem = img;
 		data->pipe = make_shared<pipeline::Pipeline>(data->imagem, windowWithTheProgressBar);
 	}
+
 	Image::~Image()
 	{
 		delete data;
+	}
+
+	void Image::AplicarSigmoide(int alpha, int beta, float min, float max)
+	{
+		data->pipe->Sigmoide(alpha, beta, min, max);
 	}
 }

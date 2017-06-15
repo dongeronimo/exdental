@@ -98,7 +98,7 @@ pipeline::Pipeline::Pipeline(shared_ptr<LoadedImage> img, HWND progressBarWindow
 	sigmoidAlpha = 409;
 	sigmoidBeta = 1392;
 	sigmoidMin = 0.0;
-	sigmoidMax = 1000.0;
+	sigmoidMax = 100.0;
 	this->progressBarWindowHandle = progressBarWindow;
 	myITKProgressObserver = MyITKProgressEventSender::New();
 	((MyITKProgressEventSender*)(myITKProgressObserver.GetPointer()))->SetHWND(progressBarWindow);
@@ -116,15 +116,18 @@ pipeline::Pipeline::Pipeline(shared_ptr<LoadedImage> img, HWND progressBarWindow
 	GpuAnisotropicDelegate(imagem->GetImage(),5,0.0125,3, imagemPosSuavizacao, progressBarWindowHandle);
 	//Sigmóide
 	shortToFloat = ShortToFloatImageFilter::New();
+	shortToFloat->AddObserver(itk::ProgressEvent(), myITKProgressObserver);
 	sigmoid = SigmoidFilter::New();
+	sigmoid->AddObserver(itk::ProgressEvent(), myITKProgressObserver);
 	floatToShort = FloatToShortImageFilter::New();
+	floatToShort->AddObserver(itk::ProgressEvent(), myITKProgressObserver);
 	SetSigmoid(sigmoidAlpha, sigmoidBeta, sigmoidMin, sigmoidMax);
 	LinkFiltersAfterGPUSmooth();
 
 	CreateFinalImageFromShort(floatToShort->GetOutput());
 	pipelineDoPlano = make_unique<SubPipelinePlanar>(finalImage);
 	pipelineDoVR = make_unique<SubPipelineVR>(finalImage);
-	pipelineDoPlano->SetWL(500, 500);
+	pipelineDoPlano->SetWL(50, 50);
 }
 
 void pipeline::Pipeline::LinkFiltersAfterGPUSmooth()

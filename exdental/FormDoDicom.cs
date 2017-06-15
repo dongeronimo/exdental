@@ -160,6 +160,15 @@ namespace exdental
         {
 
         }
+
+        private void btnAplicarSigmoid_Click(object sender, EventArgs e)
+        {
+            int alpha = Int32.Parse(edtSigmoidAlpha.Text);
+            int beta = Int32.Parse(edtSimgoidBeta.Text);
+            int min = Int32.Parse(edtSigmoidMin.Text);
+            int max = Int32.Parse(edtSigmoidMax.Text);
+            image.AplicarSigmoide(alpha, beta, min, max);
+        }
     }
 }
 

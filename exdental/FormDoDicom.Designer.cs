@@ -49,6 +49,15 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.edtSigmoidMin = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.edtSimgoidBeta = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.edtSigmoidAlpha = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.edtSigmoidMax = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.btnAplicarSigmoid = new System.Windows.Forms.Button();
             this.panelSuperior.SuspendLayout();
             this.panelFiltros.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -144,10 +153,19 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btnAplicarSigmoid);
+            this.panel1.Controls.Add(this.edtSigmoidMax);
+            this.panel1.Controls.Add(this.label9);
+            this.panel1.Controls.Add(this.edtSigmoidMin);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.edtSimgoidBeta);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.edtSigmoidAlpha);
+            this.panel1.Controls.Add(this.label8);
             this.panel1.Controls.Add(this.label7);
             this.panel1.Location = new System.Drawing.Point(0, 103);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(229, 100);
+            this.panel1.Size = new System.Drawing.Size(229, 128);
             this.panel1.TabIndex = 8;
             // 
             // label7
@@ -252,6 +270,85 @@
             this.progressBar1.Size = new System.Drawing.Size(1010, 23);
             this.progressBar1.TabIndex = 5;
             // 
+            // edtSigmoidMin
+            // 
+            this.edtSigmoidMin.Location = new System.Drawing.Point(87, 70);
+            this.edtSigmoidMin.Name = "edtSigmoidMin";
+            this.edtSigmoidMin.Size = new System.Drawing.Size(100, 20);
+            this.edtSigmoidMin.TabIndex = 12;
+            this.edtSigmoidMin.Text = "0";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(14, 70);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(23, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "min";
+            // 
+            // edtSimgoidBeta
+            // 
+            this.edtSimgoidBeta.Location = new System.Drawing.Point(87, 47);
+            this.edtSimgoidBeta.Name = "edtSimgoidBeta";
+            this.edtSimgoidBeta.Size = new System.Drawing.Size(100, 20);
+            this.edtSimgoidBeta.TabIndex = 10;
+            this.edtSimgoidBeta.Text = "1392";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(14, 47);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(29, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Beta";
+            // 
+            // edtSigmoidAlpha
+            // 
+            this.edtSigmoidAlpha.Location = new System.Drawing.Point(87, 25);
+            this.edtSigmoidAlpha.Name = "edtSigmoidAlpha";
+            this.edtSigmoidAlpha.Size = new System.Drawing.Size(100, 20);
+            this.edtSigmoidAlpha.TabIndex = 8;
+            this.edtSigmoidAlpha.Text = "409";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(14, 25);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(34, 13);
+            this.label8.TabIndex = 7;
+            this.label8.Text = "Alpha";
+            // 
+            // edtSigmoidMax
+            // 
+            this.edtSigmoidMax.Location = new System.Drawing.Point(87, 93);
+            this.edtSigmoidMax.Name = "edtSigmoidMax";
+            this.edtSigmoidMax.Size = new System.Drawing.Size(100, 20);
+            this.edtSigmoidMax.TabIndex = 14;
+            this.edtSigmoidMax.Text = "1000";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(14, 93);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(26, 13);
+            this.label9.TabIndex = 13;
+            this.label9.Text = "max";
+            // 
+            // btnAplicarSigmoid
+            // 
+            this.btnAplicarSigmoid.Location = new System.Drawing.Point(173, 4);
+            this.btnAplicarSigmoid.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAplicarSigmoid.Name = "btnAplicarSigmoid";
+            this.btnAplicarSigmoid.Size = new System.Drawing.Size(56, 19);
+            this.btnAplicarSigmoid.TabIndex = 15;
+            this.btnAplicarSigmoid.Text = "aplicar";
+            this.btnAplicarSigmoid.UseVisualStyleBackColor = true;
+            this.btnAplicarSigmoid.Click += new System.EventHandler(this.btnAplicarSigmoid_Click);
+            // 
             // formDoDicom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -302,6 +399,15 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Button btnAplicarSigmoid;
+        private System.Windows.Forms.TextBox edtSigmoidMax;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox edtSigmoidMin;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox edtSimgoidBeta;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox edtSigmoidAlpha;
+        private System.Windows.Forms.Label label8;
     }
 }
 

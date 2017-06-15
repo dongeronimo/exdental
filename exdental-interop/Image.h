@@ -37,6 +37,7 @@ namespace geronimo
 		~Image();
 		shared_ptr<pipeline::Pipeline> GetPipeline() { return data->pipe; }
 		void AplicarSuavizacao(int iterations, double timestep, double conductance);
+		void AplicarSigmoide(int alpha, int beta, float min, float max);
 		void SalvarParaOVolview(String^ file);
 	};
 }
