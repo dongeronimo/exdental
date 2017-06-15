@@ -96,6 +96,10 @@ namespace exdental
                     //    telaRadiografia.Resize(this.Size.Width, this.Size.Height);
                 }
             }
+            if (m.Msg == (2024))
+            {
+                button3.Text = "recebeu o evento";
+            }
             base.WndProc(ref m);
         }
 
@@ -160,6 +164,12 @@ namespace exdental
             telaVr.CreateScreen(panelVr);
             telaVr.SetImagem(image);
             loader.Dispose();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            loader = new ImageLoader();
+            loader.TesteEnvioDeEventoDeVoltaPraTela(this.Handle);
         }
     }
 }

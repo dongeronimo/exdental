@@ -37,5 +37,14 @@ namespace geronimo
 		~ImageLoader();
 		Image^ GetImage() { return imagem; }
 		void LoadVTI(String^ filename);
+
+		void TesteEnvioDeEventoDeVoltaPraTela(IntPtr myHWND)
+		{
+			HWND hwnd = (HWND)myHWND.ToPointer();
+			unsigned int msg = WM_USER + 1000;
+			WPARAM wParam = 10;
+			LPARAM lParam = 0;
+			SendMessage(hwnd, msg, wParam, lParam);
+		}
 	};
 }

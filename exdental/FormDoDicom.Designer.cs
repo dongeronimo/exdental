@@ -51,6 +51,7 @@
             this.edtGpuSmoothIterations = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
             this.panelSuperior.SuspendLayout();
             this.panelFiltros.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -59,6 +60,7 @@
             // 
             // panelSuperior
             // 
+            this.panelSuperior.Controls.Add(this.button3);
             this.panelSuperior.Controls.Add(this.button2);
             this.panelSuperior.Controls.Add(this.button1);
             this.panelSuperior.Controls.Add(this.buttonAbrir);
@@ -272,6 +274,16 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Suavização Anistrópica";
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(875, 0);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 4;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // formDoDicom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -324,6 +336,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
     }
 }
 
