@@ -24,6 +24,11 @@ namespace exdental
         private geronimo.TelaRadiografia telaRadiografia = null;
         private TelaVR telaVr = null;
 
+        private void RefreshTelas()
+        {
+            panelRenderizacao.Refresh();
+            panelVr.Refresh();
+        }
         public formDoDicom()
         {
             InitializeComponent();
@@ -126,8 +131,7 @@ namespace exdental
             double _gpuTS = Double.Parse(edtGpuSmoothTimestep.Text, new CultureInfo("en-US"));
             double _gpuConductance = Double.Parse(edtGpuSmoothConductance.Text, new CultureInfo("en-US"));
             image.AplicarSuavizacao(_gpuIteracoes, _gpuTS, _gpuConductance);
-            panelRenderizacao.Refresh();
-            panelVr.Refresh();
+            RefreshTelas();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -168,6 +172,12 @@ namespace exdental
             int min = Int32.Parse(edtSigmoidMin.Text);
             int max = Int32.Parse(edtSigmoidMax.Text);
             image.AplicarSigmoide(alpha, beta, min, max);
+            RefreshTelas();
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            image.SalvarSigmoide("C:\\Users\\geronimo\\dicom\\maxilar_sigmoide.vti");
         }
     }
 }

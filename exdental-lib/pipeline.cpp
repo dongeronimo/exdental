@@ -38,14 +38,14 @@ pipeline::SubPipelineVR::SubPipelineVR(vtkSmartPointer<vtkImageImport> img)
 	vrMapper->SetInputConnection(img->GetOutputPort());
 	vrProperty = vtkSmartPointer<vtkVolumeProperty>::New();
 	vtkSmartPointer<vtkPiecewiseFunction> opacityFunction = vtkSmartPointer<vtkPiecewiseFunction>::New();
-	opacityFunction->AddSegment(0, 0, 300, 0.2);
-	opacityFunction->AddSegment(301, 0.2, 800, 0.8);
-	opacityFunction->AddSegment(801, 0.8, 1200, 1);
+	opacityFunction->AddSegment(0, 0, 200, 0.2);
+	opacityFunction->AddSegment(201, 0.2, 600, 0.8);
+	opacityFunction->AddSegment(601, 0.8, 1000, 1);
 	vrProperty->SetScalarOpacity(opacityFunction);
 	vtkSmartPointer<vtkColorTransferFunction> colorFunction = vtkSmartPointer<vtkColorTransferFunction>::New();
-	colorFunction->AddRGBSegment(0, 0, 0, 0, 300, 1, 0, 0);
-	colorFunction->AddRGBSegment(301, 1, 0, 0, 800, 1, 1, 0);
-	colorFunction->AddRGBSegment(801, 1, 1, 0, 1200, 1, 1, 1);
+	colorFunction->AddRGBSegment(0, 0, 0, 0, 200, 1, 0, 0);
+	colorFunction->AddRGBSegment(201, 1, 0, 0, 600, 1, 1, 0);
+	colorFunction->AddRGBSegment(601, 1, 1, 0, 1000, 1, 1, 1);
 	vrProperty->SetColor(colorFunction);
 	vrProperty->ShadeOn();
 	//Propriedades definindas
@@ -157,6 +157,11 @@ void pipeline::Pipeline::Sigmoide(short alpha, short beta, float min, float max)
 	CreateFinalImageFromShort(floatToShort->GetOutput());
 	pipelineDoPlano->Update();
 	pipelineDoVR->Update();
+}
+
+void pipeline::Pipeline::SalvarSigmoide(string file)
+{
+	imageLoader::SaveAsXML(sigmoid->GetOutput(), file);
 }
 
 void pipeline::Pipeline::Suavizacao(int iterations, double timestep, double conductance)

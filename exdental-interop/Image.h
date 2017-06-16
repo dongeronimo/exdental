@@ -39,5 +39,6 @@ namespace geronimo
 		void AplicarSuavizacao(int iterations, double timestep, double conductance);
 		void AplicarSigmoide(int alpha, int beta, float min, float max);
 		void SalvarParaOVolview(String^ file);
+		void SalvarSigmoide(String^ file);
 	};
 }

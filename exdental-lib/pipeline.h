@@ -148,5 +148,6 @@ namespace pipeline
 		}
 		void Suavizacao(int iterations, double timestep, double conductance);
 		void Sigmoide(short alpha, short beta, float min, float max);
+		void SalvarSigmoide(string file);
 	};
 }

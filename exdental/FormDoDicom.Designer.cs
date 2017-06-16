@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.panelSuperior = new System.Windows.Forms.Panel();
-            this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.buttonAbrir = new System.Windows.Forms.Button();
@@ -38,6 +37,15 @@
             this.panelVr = new System.Windows.Forms.Panel();
             this.panelFiltros = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnAplicarSigmoid = new System.Windows.Forms.Button();
+            this.edtSigmoidMax = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.edtSigmoidMin = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.edtSimgoidBeta = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.edtSigmoidAlpha = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.panelPropriedadesGPU = new System.Windows.Forms.Panel();
             this.btnAplicarGpuSmooth = new System.Windows.Forms.Button();
@@ -49,15 +57,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.edtSigmoidMin = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.edtSimgoidBeta = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.edtSigmoidAlpha = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.edtSigmoidMax = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.btnAplicarSigmoid = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.button3 = new System.Windows.Forms.Button();
             this.panelSuperior.SuspendLayout();
             this.panelFiltros.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -66,7 +67,6 @@
             // 
             // panelSuperior
             // 
-            this.panelSuperior.Controls.Add(this.button3);
             this.panelSuperior.Controls.Add(this.button2);
             this.panelSuperior.Controls.Add(this.button1);
             this.panelSuperior.Controls.Add(this.buttonAbrir);
@@ -77,19 +77,9 @@
             this.panelSuperior.Size = new System.Drawing.Size(1016, 29);
             this.panelSuperior.TabIndex = 0;
             // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(875, 0);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(721, 0);
+            this.button2.Location = new System.Drawing.Point(431, 0);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(125, 23);
             this.button2.TabIndex = 3;
@@ -99,7 +89,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(565, 0);
+            this.button1.Location = new System.Drawing.Point(855, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(149, 23);
             this.button1.TabIndex = 2;
@@ -109,7 +99,7 @@
             // 
             // buttonAbrir
             // 
-            this.buttonAbrir.Location = new System.Drawing.Point(483, 0);
+            this.buttonAbrir.Location = new System.Drawing.Point(350, 1);
             this.buttonAbrir.Name = "buttonAbrir";
             this.buttonAbrir.Size = new System.Drawing.Size(75, 20);
             this.buttonAbrir.TabIndex = 1;
@@ -121,7 +111,7 @@
             // 
             this.textBoxPath.Location = new System.Drawing.Point(0, 0);
             this.textBoxPath.Name = "textBoxPath";
-            this.textBoxPath.Size = new System.Drawing.Size(477, 20);
+            this.textBoxPath.Size = new System.Drawing.Size(344, 20);
             this.textBoxPath.TabIndex = 0;
             // 
             // panelRenderizacao
@@ -129,16 +119,16 @@
             this.panelRenderizacao.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.panelRenderizacao.Location = new System.Drawing.Point(237, 35);
             this.panelRenderizacao.Name = "panelRenderizacao";
-            this.panelRenderizacao.Size = new System.Drawing.Size(402, 383);
+            this.panelRenderizacao.Size = new System.Drawing.Size(402, 441);
             this.panelRenderizacao.TabIndex = 1;
             this.panelRenderizacao.Paint += new System.Windows.Forms.PaintEventHandler(this.panelRenderizacao_Paint);
             // 
             // panelVr
             // 
-            this.panelVr.Location = new System.Drawing.Point(644, 34);
+            this.panelVr.Location = new System.Drawing.Point(644, 35);
             this.panelVr.Margin = new System.Windows.Forms.Padding(2);
             this.panelVr.Name = "panelVr";
-            this.panelVr.Size = new System.Drawing.Size(367, 384);
+            this.panelVr.Size = new System.Drawing.Size(367, 441);
             this.panelVr.TabIndex = 3;
             // 
             // panelFiltros
@@ -148,11 +138,12 @@
             this.panelFiltros.Location = new System.Drawing.Point(0, 35);
             this.panelFiltros.Margin = new System.Windows.Forms.Padding(2);
             this.panelFiltros.Name = "panelFiltros";
-            this.panelFiltros.Size = new System.Drawing.Size(232, 383);
+            this.panelFiltros.Size = new System.Drawing.Size(232, 441);
             this.panelFiltros.TabIndex = 4;
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button3);
             this.panel1.Controls.Add(this.btnAplicarSigmoid);
             this.panel1.Controls.Add(this.edtSigmoidMax);
             this.panel1.Controls.Add(this.label9);
@@ -163,10 +154,89 @@
             this.panel1.Controls.Add(this.edtSigmoidAlpha);
             this.panel1.Controls.Add(this.label8);
             this.panel1.Controls.Add(this.label7);
-            this.panel1.Location = new System.Drawing.Point(0, 103);
+            this.panel1.Location = new System.Drawing.Point(3, 101);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(229, 128);
+            this.panel1.Size = new System.Drawing.Size(229, 135);
             this.panel1.TabIndex = 8;
+            // 
+            // btnAplicarSigmoid
+            // 
+            this.btnAplicarSigmoid.Location = new System.Drawing.Point(87, 4);
+            this.btnAplicarSigmoid.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAplicarSigmoid.Name = "btnAplicarSigmoid";
+            this.btnAplicarSigmoid.Size = new System.Drawing.Size(56, 19);
+            this.btnAplicarSigmoid.TabIndex = 15;
+            this.btnAplicarSigmoid.Text = "aplicar";
+            this.btnAplicarSigmoid.UseVisualStyleBackColor = true;
+            this.btnAplicarSigmoid.Click += new System.EventHandler(this.btnAplicarSigmoid_Click);
+            // 
+            // edtSigmoidMax
+            // 
+            this.edtSigmoidMax.Location = new System.Drawing.Point(87, 93);
+            this.edtSigmoidMax.Name = "edtSigmoidMax";
+            this.edtSigmoidMax.Size = new System.Drawing.Size(100, 20);
+            this.edtSigmoidMax.TabIndex = 14;
+            this.edtSigmoidMax.Text = "1000";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(14, 93);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(26, 13);
+            this.label9.TabIndex = 13;
+            this.label9.Text = "max";
+            // 
+            // edtSigmoidMin
+            // 
+            this.edtSigmoidMin.Location = new System.Drawing.Point(87, 70);
+            this.edtSigmoidMin.Name = "edtSigmoidMin";
+            this.edtSigmoidMin.Size = new System.Drawing.Size(100, 20);
+            this.edtSigmoidMin.TabIndex = 12;
+            this.edtSigmoidMin.Text = "0";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(14, 70);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(23, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "min";
+            // 
+            // edtSimgoidBeta
+            // 
+            this.edtSimgoidBeta.Location = new System.Drawing.Point(87, 47);
+            this.edtSimgoidBeta.Name = "edtSimgoidBeta";
+            this.edtSimgoidBeta.Size = new System.Drawing.Size(100, 20);
+            this.edtSimgoidBeta.TabIndex = 10;
+            this.edtSimgoidBeta.Text = "1392";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(14, 47);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(29, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Beta";
+            // 
+            // edtSigmoidAlpha
+            // 
+            this.edtSigmoidAlpha.Location = new System.Drawing.Point(87, 25);
+            this.edtSigmoidAlpha.Name = "edtSigmoidAlpha";
+            this.edtSigmoidAlpha.Size = new System.Drawing.Size(100, 20);
+            this.edtSigmoidAlpha.TabIndex = 8;
+            this.edtSigmoidAlpha.Text = "409";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(14, 25);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(34, 13);
+            this.label8.TabIndex = 7;
+            this.label8.Text = "Alpha";
             // 
             // label7
             // 
@@ -187,14 +257,14 @@
             this.panelPropriedadesGPU.Controls.Add(this.edtGpuSmoothIterations);
             this.panelPropriedadesGPU.Controls.Add(this.label4);
             this.panelPropriedadesGPU.Controls.Add(this.label3);
-            this.panelPropriedadesGPU.Location = new System.Drawing.Point(0, 4);
+            this.panelPropriedadesGPU.Location = new System.Drawing.Point(3, 3);
             this.panelPropriedadesGPU.Name = "panelPropriedadesGPU";
             this.panelPropriedadesGPU.Size = new System.Drawing.Size(232, 92);
             this.panelPropriedadesGPU.TabIndex = 2;
             // 
             // btnAplicarGpuSmooth
             // 
-            this.btnAplicarGpuSmooth.Location = new System.Drawing.Point(176, 4);
+            this.btnAplicarGpuSmooth.Location = new System.Drawing.Point(134, 4);
             this.btnAplicarGpuSmooth.Margin = new System.Windows.Forms.Padding(2);
             this.btnAplicarGpuSmooth.Name = "btnAplicarGpuSmooth";
             this.btnAplicarGpuSmooth.Size = new System.Drawing.Size(56, 19);
@@ -265,95 +335,27 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(0, 424);
+            this.progressBar1.Location = new System.Drawing.Point(0, 481);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(1010, 23);
             this.progressBar1.TabIndex = 5;
             // 
-            // edtSigmoidMin
+            // button3
             // 
-            this.edtSigmoidMin.Location = new System.Drawing.Point(87, 70);
-            this.edtSigmoidMin.Name = "edtSigmoidMin";
-            this.edtSigmoidMin.Size = new System.Drawing.Size(100, 20);
-            this.edtSigmoidMin.TabIndex = 12;
-            this.edtSigmoidMin.Text = "0";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 70);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(23, 13);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "min";
-            // 
-            // edtSimgoidBeta
-            // 
-            this.edtSimgoidBeta.Location = new System.Drawing.Point(87, 47);
-            this.edtSimgoidBeta.Name = "edtSimgoidBeta";
-            this.edtSimgoidBeta.Size = new System.Drawing.Size(100, 20);
-            this.edtSimgoidBeta.TabIndex = 10;
-            this.edtSimgoidBeta.Text = "1392";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 47);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 13);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "Beta";
-            // 
-            // edtSigmoidAlpha
-            // 
-            this.edtSigmoidAlpha.Location = new System.Drawing.Point(87, 25);
-            this.edtSigmoidAlpha.Name = "edtSigmoidAlpha";
-            this.edtSigmoidAlpha.Size = new System.Drawing.Size(100, 20);
-            this.edtSigmoidAlpha.TabIndex = 8;
-            this.edtSigmoidAlpha.Text = "409";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(14, 25);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(34, 13);
-            this.label8.TabIndex = 7;
-            this.label8.Text = "Alpha";
-            // 
-            // edtSigmoidMax
-            // 
-            this.edtSigmoidMax.Location = new System.Drawing.Point(87, 93);
-            this.edtSigmoidMax.Name = "edtSigmoidMax";
-            this.edtSigmoidMax.Size = new System.Drawing.Size(100, 20);
-            this.edtSigmoidMax.TabIndex = 14;
-            this.edtSigmoidMax.Text = "1000";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(14, 93);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(26, 13);
-            this.label9.TabIndex = 13;
-            this.label9.Text = "max";
-            // 
-            // btnAplicarSigmoid
-            // 
-            this.btnAplicarSigmoid.Location = new System.Drawing.Point(173, 4);
-            this.btnAplicarSigmoid.Margin = new System.Windows.Forms.Padding(2);
-            this.btnAplicarSigmoid.Name = "btnAplicarSigmoid";
-            this.btnAplicarSigmoid.Size = new System.Drawing.Size(56, 19);
-            this.btnAplicarSigmoid.TabIndex = 15;
-            this.btnAplicarSigmoid.Text = "aplicar";
-            this.btnAplicarSigmoid.UseVisualStyleBackColor = true;
-            this.btnAplicarSigmoid.Click += new System.EventHandler(this.btnAplicarSigmoid_Click);
+            this.button3.Location = new System.Drawing.Point(147, 4);
+            this.button3.Margin = new System.Windows.Forms.Padding(2);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(66, 19);
+            this.button3.TabIndex = 16;
+            this.button3.Text = "salvar";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
             // formDoDicom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1016, 445);
+            this.ClientSize = new System.Drawing.Size(1016, 505);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.panelFiltros);
             this.Controls.Add(this.panelVr);
@@ -397,7 +399,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button btnAplicarSigmoid;
         private System.Windows.Forms.TextBox edtSigmoidMax;
@@ -408,6 +409,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox edtSigmoidAlpha;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button button3;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 

@@ -29,4 +29,10 @@ namespace geronimo
 	{
 		data->pipe->Sigmoide(alpha, beta, min, max);
 	}
+
+	void Image::SalvarSigmoide(String^ file)
+	{
+		std::string stdFile = msclr::interop::marshal_as<std::string>(file);
+		data->pipe->SalvarSigmoide(stdFile);
+	}
 }
