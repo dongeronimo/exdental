@@ -59,10 +59,14 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.button3 = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.button4 = new System.Windows.Forms.Button();
+            this.label13 = new System.Windows.Forms.Label();
             this.panelSuperior.SuspendLayout();
             this.panelFiltros.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panelPropriedadesGPU.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelSuperior
@@ -133,6 +137,7 @@
             // 
             // panelFiltros
             // 
+            this.panelFiltros.Controls.Add(this.panel2);
             this.panelFiltros.Controls.Add(this.panel1);
             this.panelFiltros.Controls.Add(this.panelPropriedadesGPU);
             this.panelFiltros.Location = new System.Drawing.Point(0, 35);
@@ -351,6 +356,35 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.button4);
+            this.panel2.Controls.Add(this.label13);
+            this.panel2.Location = new System.Drawing.Point(3, 242);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(232, 92);
+            this.panel2.TabIndex = 9;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(147, 4);
+            this.button4.Margin = new System.Windows.Forms.Padding(2);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(56, 19);
+            this.button4.TabIndex = 7;
+            this.button4.Text = "salvar";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(11, 4);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(29, 13);
+            this.label13.TabIndex = 0;
+            this.label13.Text = "Otsu";
+            // 
             // formDoDicom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -374,6 +408,8 @@
             this.panel1.PerformLayout();
             this.panelPropriedadesGPU.ResumeLayout(false);
             this.panelPropriedadesGPU.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -411,6 +447,9 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button button3;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Label label13;
     }
 }
 

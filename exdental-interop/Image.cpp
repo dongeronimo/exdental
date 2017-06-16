@@ -35,4 +35,10 @@ namespace geronimo
 		std::string stdFile = msclr::interop::marshal_as<std::string>(file);
 		data->pipe->SalvarSigmoide(stdFile);
 	}
+
+	void Image::SalvarOtsu(String^ file)
+	{
+		std::string stdFile = msclr::interop::marshal_as<std::string>(file);
+		data->pipe->SalvarOtsu(stdFile);
+	}
 }

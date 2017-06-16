@@ -11,6 +11,7 @@
 #include <vtkImageProperty.h>
 #include <itkSigmoidImageFilter.h>
 #include <itkCastImageFilter.h>
+#include <itkOtsuThresholdImageFilter.h>
 
 #include <vtkImageSlice.h>
 using namespace std;
@@ -109,8 +110,7 @@ namespace pipeline
 		typedef itk::CastImageFilter<itk::Image<short, 3>, itk::Image<float, 3>> ShortToFloatImageFilter;
 		typedef itk::SigmoidImageFilter<itk::Image<float, 3>, itk::Image<float, 3>> SigmoidFilter;
 		typedef itk::CastImageFilter<itk::Image<float, 3>, itk::Image<short, 3>> FloatToShortImageFilter;
-		
-
+		typedef itk::OtsuThresholdImageFilter< itk::Image<float, 3>, itk::Image<float, 3> > OtsuThresholdFilter;
 		typedef  void (_stdcall *GpuAnisotropicFilterDelegate)(itk::Image<short, 3>::Pointer input, 
 			int numberOfIterations, double timeStep, double conductanceParameter,
 			itk::Image<short, 3>::Pointer output, HWND progressObserverHandle);
@@ -125,6 +125,7 @@ namespace pipeline
 
 		ShortToFloatImageFilter::Pointer shortToFloat;
 		SigmoidFilter::Pointer sigmoid;
+		OtsuThresholdFilter::Pointer thresholder;
 		FloatToShortImageFilter::Pointer floatToShort;
 		HWND progressBarWindowHandle;
 		short sigmoidAlpha;
@@ -149,5 +150,6 @@ namespace pipeline
 		void Suavizacao(int iterations, double timestep, double conductance);
 		void Sigmoide(short alpha, short beta, float min, float max);
 		void SalvarSigmoide(string file);
+		void SalvarOtsu(string file);
 	};
 }

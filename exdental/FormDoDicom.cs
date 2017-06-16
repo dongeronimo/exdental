@@ -179,6 +179,11 @@ namespace exdental
         {
             image.SalvarSigmoide("C:\\Users\\geronimo\\dicom\\maxilar_sigmoide.vti");
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            image.SalvarOtsu("C:\\Users\\geronimo\\dicom\\maxilar_otsu.vti");
+        }
     }
 }
 

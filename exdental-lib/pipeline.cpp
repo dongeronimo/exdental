@@ -119,8 +119,14 @@ pipeline::Pipeline::Pipeline(shared_ptr<LoadedImage> img, HWND progressBarWindow
 	shortToFloat->AddObserver(itk::ProgressEvent(), myITKProgressObserver);
 	sigmoid = SigmoidFilter::New();
 	sigmoid->AddObserver(itk::ProgressEvent(), myITKProgressObserver);
+	thresholder = OtsuThresholdFilter::New();
+	thresholder->AddObserver(itk::ProgressEvent(), myITKProgressObserver);
+	thresholder->DebugOn();
+	thresholder->SetInsideValue(0);
+	thresholder->SetOutsideValue(100);
 	floatToShort = FloatToShortImageFilter::New();
 	floatToShort->AddObserver(itk::ProgressEvent(), myITKProgressObserver);
+	
 	SetSigmoid(sigmoidAlpha, sigmoidBeta, sigmoidMin, sigmoidMax);
 	LinkFiltersAfterGPUSmooth();
 
@@ -134,7 +140,8 @@ void pipeline::Pipeline::LinkFiltersAfterGPUSmooth()
 {
 	shortToFloat->SetInput(imagemPosSuavizacao);
 	sigmoid->SetInput(shortToFloat->GetOutput());
-	floatToShort->SetInput(sigmoid->GetOutput());
+	thresholder->SetInput(sigmoid->GetOutput());
+	floatToShort->SetInput(thresholder->GetOutput());
 	floatToShort->Update();
 }
 
@@ -162,6 +169,11 @@ void pipeline::Pipeline::Sigmoide(short alpha, short beta, float min, float max)
 void pipeline::Pipeline::SalvarSigmoide(string file)
 {
 	imageLoader::SaveAsXML(sigmoid->GetOutput(), file);
+}
+
+void pipeline::Pipeline::SalvarOtsu(string file)
+{
+	imageLoader::SaveAsXML(thresholder->GetOutput(), file);
 }
 
 void pipeline::Pipeline::Suavizacao(int iterations, double timestep, double conductance)

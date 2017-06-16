@@ -40,5 +40,6 @@ namespace geronimo
 		void AplicarSigmoide(int alpha, int beta, float min, float max);
 		void SalvarParaOVolview(String^ file);
 		void SalvarSigmoide(String^ file);
+		void SalvarOtsu(String^ file);
 	};
 }
