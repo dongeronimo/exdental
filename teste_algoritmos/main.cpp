@@ -18,6 +18,7 @@
 #include <vtkImageReslice.h>
 #include <vtkPNGWriter.h>
 #include <vtkImageInterpolator.h>
+#include <vtkImageFFT.h>
 using namespace std;
 
 typedef array<unsigned int, 3> TuplaRGB;
@@ -27,10 +28,14 @@ vtkSmartPointer<vtkImageData> LoadImagemOriginal(string filepath);
 void SalvarImagem(vtkSmartPointer<vtkImageData> img, string filename);
 //Gira a imagem ao redor de seu centro por um angulo tetha (em graus).
 vtkSmartPointer<vtkImageData> RotateImage(vtkSmartPointer<vtkImageData>input, double tetha);
-
+//Projeta a imagem passado raios nela.
 LinhaProjetada CalculaProjecaoDaImagem(vtkSmartPointer<vtkImageData> rotatedImage, vtkSmartPointer<vtkImageData> originalImage);
-void NormalizaLinhas(vector<LinhaProjetada> &linhas);
-
+//Monta o sinograma
+vtkSmartPointer<vtkImageData> GerarSinograma(vector<LinhaProjetada> linhas);
+//Reconstrução da imagem
+vtkSmartPointer<vtkImageData> ReconstrucaoSimpleBackprojection(vtkSmartPointer<vtkImageData> sinograma);
+//Cria uma tela pra ver a imagem
+vtkSmartPointer<vtkImageViewer2> GerarVisualizacao(vtkSmartPointer<vtkImageData> img);
 int main(int argc, char** argv)
 {
 	vtkSmartPointer<vtkImageData> imagem = LoadImagemOriginal("C:\\src\\exdental\\black_dot.png");
@@ -42,39 +47,77 @@ int main(int argc, char** argv)
 	imagem->GetCenter(centroDaImagem.data());
 	array<int, 3> dimensoesDaImagem;
 	imagem->GetDimensions(dimensoesDaImagem.data());
-
+	//Pega as projeções dos raios fazendo as inclinações da imagem
 	vector<LinhaProjetada> linhas;
-	for(int i=0; i<=180;i++)
+	for(int i=0; i<=360;i++)
 	{
 		vtkSmartPointer<vtkImageData> rotatedImage = RotateImage(imagem, i);
 		LinhaProjetada linhaAtual = CalculaProjecaoDaImagem(rotatedImage, imagem);
 		linhas.push_back(linhaAtual);
 	}
-	//cria a imagem de teste
+	vtkSmartPointer<vtkImageData> sinograma = GerarSinograma(linhas);
+	
+	vtkSmartPointer<vtkImageFFT> fft = vtkSmartPointer<vtkImageFFT>::New();
+	fft->SetDimensionality(2);
+	fft->SetInputData(imagem);
+	fft->Update();
+	vtkImageData* minhaFFT = fft->GetOutput();
+	cout<<minhaFFT->GetScalarTypeAsString()<<endl;
+	SalvarImagem(fft->GetOutput(), "C:\\src\\exdental\\fft.png");
+	
+
+	vtkSmartPointer<vtkImageViewer2> visualizaçãoDoSinograma = GerarVisualizacao(sinograma);
+	vtkSmartPointer<vtkImageViewer2> visualizaçãoDaFFT = GerarVisualizacao(fft->GetOutput());
+	visualizaçãoDoSinograma->GetRenderWindow()->GetInteractor()->Start();
+	return EXIT_SUCCESS;
+}
+vtkSmartPointer<vtkImageData> ReconstrucaoSimpleBackprojection(vtkSmartPointer<vtkImageData> sinograma)
+{
+	//O X é o ângulo [0,360], o Y é a amostragem
+	array<int, 3> dimensoesDoSinograma;
+	sinograma->GetDimensions(dimensoesDoSinograma.data());
+	//cria a imagem
+	vtkSmartPointer<vtkImageData> reconstrucao = vtkSmartPointer<vtkImageData>::New();
+	reconstrucao->SetExtent(0, dimensoesDoSinograma[1]-1, 0, dimensoesDoSinograma[1] - 1, 0, 1);
+	reconstrucao->SetOrigin(0, 0, 0);
+	reconstrucao->SetSpacing(1, 1, 1);
+	reconstrucao->AllocateScalars(VTK_FLOAT, 1);
+	//para cada coluna do sinograma:
+		//1)obtenha os valores da projeção
+		//2)rotacione reconstrução 1º
+		//3)marche os valores de cada elemento do vetor de valores de projeção, indo de cima para baixo
+		//em reconstrução.
+
+	return reconstrucao;
+}
+vtkSmartPointer<vtkImageData> GerarSinograma(vector<LinhaProjetada> linhas)
+{
 	vtkSmartPointer<vtkImageData> testeImagem = vtkSmartPointer<vtkImageData>::New();
-	testeImagem->SetExtent(0, 180, 0, 256, 0, 1);
+	testeImagem->SetExtent(0, 359, 0, 255, 0, 1);
 	testeImagem->SetOrigin(0, 0, 0);
 	testeImagem->SetSpacing(1, 1, 1);
 	testeImagem->AllocateScalars(VTK_UNSIGNED_INT, 1);
 	//passa os dados
-	for(int x=0; x<=180; x++)
+	for (int x = 0; x < 360; x++)
 	{
-		for(int y=0; y<256; y++)
+		for (int y = 0; y<256; y++)
 		{
-			testeImagem->SetScalarComponentFromDouble(x, y, 0,0, linhas[x][y][0]);
-		}	
+			testeImagem->SetScalarComponentFromDouble(x, y, 0, 0, linhas[x][y][0]);
+		}
 	}
-	//exibe na tela pra eu ver
-	// Visualize
+	return testeImagem;
+}
+
+vtkSmartPointer<vtkImageViewer2> GerarVisualizacao(vtkSmartPointer<vtkImageData> img)
+{
 	vtkSmartPointer<vtkImageViewer2> imageViewer = vtkSmartPointer<vtkImageViewer2>::New();
-	imageViewer->SetInputData(testeImagem);
+	imageViewer->SetInputData(img);
 	vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
 	imageViewer->SetupInteractor(renderWindowInteractor);
 	imageViewer->Render();
 	imageViewer->GetRenderer()->ResetCamera();
 	imageViewer->Render();
-	renderWindowInteractor->Start();
-	return EXIT_SUCCESS;
+	return imageViewer;
 }
 
 LinhaProjetada CalculaProjecaoDaImagem(vtkSmartPointer<vtkImageData> rotatedImage, vtkSmartPointer<vtkImageData> originalImage)
