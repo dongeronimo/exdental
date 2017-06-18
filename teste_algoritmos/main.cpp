@@ -1,8 +1,16 @@
 #include <iostream>
 #include <array>
 #include <string>
+#include <vector>
 #include <sstream>
 
+#include <vtkImageActor.h>
+#include <vtkImageProperty.h>
+#include <vtkProperty2D.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkRenderer.h>
+#include <vtkRenderWindow.h>
+#include <vtkImageViewer2.h>
 #include <vtkSmartPointer.h>
 #include <vtkPNGReader.h>
 #include <vtkImageData.h>
@@ -12,11 +20,16 @@
 #include <vtkImageInterpolator.h>
 using namespace std;
 
+typedef array<unsigned int, 3> TuplaRGB;
+typedef vector<TuplaRGB> LinhaProjetada;
+
 vtkSmartPointer<vtkImageData> LoadImagemOriginal(string filepath);
 void SalvarImagem(vtkSmartPointer<vtkImageData> img, string filename);
 //Gira a imagem ao redor de seu centro por um angulo tetha (em graus).
 vtkSmartPointer<vtkImageData> RotateImage(vtkSmartPointer<vtkImageData>input, double tetha);
 
+LinhaProjetada CalculaProjecaoDaImagem(vtkSmartPointer<vtkImageData> rotatedImage, vtkSmartPointer<vtkImageData> originalImage);
+void NormalizaLinhas(vector<LinhaProjetada> &linhas);
 
 int main(int argc, char** argv)
 {
@@ -30,30 +43,66 @@ int main(int argc, char** argv)
 	array<int, 3> dimensoesDaImagem;
 	imagem->GetDimensions(dimensoesDaImagem.data());
 
-	//Gira a imagem
-	vtkSmartPointer<vtkImageData> rotatedImage = RotateImage(imagem, 0);
+	vector<LinhaProjetada> linhas;
+	for(int i=0; i<=180;i++)
+	{
+		vtkSmartPointer<vtkImageData> rotatedImage = RotateImage(imagem, i);
+		LinhaProjetada linhaAtual = CalculaProjecaoDaImagem(rotatedImage, imagem);
+		linhas.push_back(linhaAtual);
+	}
+	//cria a imagem de teste
+	vtkSmartPointer<vtkImageData> testeImagem = vtkSmartPointer<vtkImageData>::New();
+	testeImagem->SetExtent(0, 180, 0, 256, 0, 1);
+	testeImagem->SetOrigin(0, 0, 0);
+	testeImagem->SetSpacing(1, 1, 1);
+	testeImagem->AllocateScalars(VTK_UNSIGNED_INT, 1);
+	//passa os dados
+	for(int x=0; x<=180; x++)
+	{
+		for(int y=0; y<256; y++)
+		{
+			testeImagem->SetScalarComponentFromDouble(x, y, 0,0, linhas[x][y][0]);
+		}	
+	}
+	//exibe na tela pra eu ver
+	// Visualize
+	vtkSmartPointer<vtkImageViewer2> imageViewer = vtkSmartPointer<vtkImageViewer2>::New();
+	imageViewer->SetInputData(testeImagem);
+	vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
+	imageViewer->SetupInteractor(renderWindowInteractor);
+	imageViewer->Render();
+	imageViewer->GetRenderer()->ResetCamera();
+	imageViewer->Render();
+	renderWindowInteractor->Start();
+	return EXIT_SUCCESS;
+}
+
+LinhaProjetada CalculaProjecaoDaImagem(vtkSmartPointer<vtkImageData> rotatedImage, vtkSmartPointer<vtkImageData> originalImage)
+{
+	array<double, 3> origemDaImagem;
+	originalImage->GetOrigin(origemDaImagem.data());
+	array<double, 3> spacingDaImagem;
+	originalImage->GetSpacing(spacingDaImagem.data());
+	array<double, 3> centroDaImagem;
+	originalImage->GetCenter(centroDaImagem.data());
+	array<int, 3> dimensoesDaImagem;
+	originalImage->GetDimensions(dimensoesDaImagem.data());
+
 	//Cria o interpolador
 	vtkSmartPointer<vtkImageInterpolator> rotatedImageInterpolator = vtkSmartPointer<vtkImageInterpolator>::New();
 	rotatedImageInterpolator->SetInterpolationModeToLinear();
 	rotatedImageInterpolator->SetOutValue(0);
 	rotatedImageInterpolator->Initialize(rotatedImage);
 	rotatedImageInterpolator->Update();
-	//Canvas de teste, só pra eu enxergar o que está acontecendo.
-	vtkSmartPointer<vtkImageData> canvasDeTeste = vtkSmartPointer<vtkImageData>::New();
-	canvasDeTeste->SetExtent(0, 255, 0, 255, 0, 1);
-	canvasDeTeste->SetSpacing(1, 1, 1);
-	canvasDeTeste->SetOrigin(0, 0, 0);
-	canvasDeTeste->AllocateScalars(VTK_UNSIGNED_CHAR, 3);
-	void *buffer = canvasDeTeste->GetScalarPointer();
-	memset(buffer, 0, 256 * 256 * 3);
 	//Percorre ao longo da horizontal gerando raios e marchando-os fazendo as integrações.
-	for(int i=0; i<dimensoesDaImagem[0];i++)
+	LinhaProjetada resultado;
+	for (int i = 0; i<dimensoesDaImagem[0]; i++)
 	{
 		//seta o vetor e o ponto inicial do raio atual, partindo da parte inferior da imagem
 		array<double, 2> r0i = { i*spacingDaImagem[0], 0 };
 		array<double, 2> rVeci = { 0,1 };
 		array<double, 3> somatorioRaioAtual = { 0,0,0 };
-		for(int gamma = 0; gamma < dimensoesDaImagem[0]; gamma++)
+		for (int gamma = 0; gamma < dimensoesDaImagem[0]; gamma++)
 		{
 			//calcula o ponto atual da marcha.
 			const array<double, 3> pontoAtual = {
@@ -68,14 +117,10 @@ int main(int argc, char** argv)
 			somatorioRaioAtual[1] += valorComponentes[1];
 			somatorioRaioAtual[2] += valorComponentes[2];
 		}
-		cout << somatorioRaioAtual[0] << endl;
-		canvasDeTeste->SetScalarComponentFromDouble(i, 128, 0, 0, somatorioRaioAtual[0]);
-		canvasDeTeste->SetScalarComponentFromDouble(i, 128, 0, 1, somatorioRaioAtual[1]);
-		canvasDeTeste->SetScalarComponentFromDouble(i, 128, 0, 2, somatorioRaioAtual[2]);
+		array<unsigned int, 3> raioAtual = { somatorioRaioAtual[0], somatorioRaioAtual[1], somatorioRaioAtual[2] };
+		resultado.push_back(raioAtual);
 	}
-	SalvarImagem(rotatedImage, "C:\\src\\exdental\\rotated_image.png");
-	SalvarImagem(canvasDeTeste, "C:\\src\\exdental\\somatorio_teste.png");
-	return EXIT_SUCCESS;
+	return resultado;
 }
 
 vtkSmartPointer<vtkImageData> RotateImage(vtkSmartPointer<vtkImageData>input, double tetha)
