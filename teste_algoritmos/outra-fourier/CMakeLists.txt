@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 set(CMAKE_SUPPRESS_REGENERATION true)
-project(teste-algoritmos)
+project(outra-fourier)
 
 set(VTK_DIR "C:/libs/VTK-7.0.0-64bits")
 set(ITK_DIR "C:/libs/InsightToolkit-4.8.1-64bits")
@@ -12,13 +12,10 @@ find_package(ITK REQUIRED)
 include(${ITK_USE_FILE})
 
 file(GLOB my_source_files "*.h" "*.cpp" "*.cxx")
-add_executable(teste-algoritmos ${my_source_files} )  
+add_executable(outra-fourier ${my_source_files} )  
 
-add_subdirectory("./teste_fourier")
-add_subdirectory("./RgbToGrayscale")
-add_subdirectory("./outra-fourier")
 #bota vtk e ITK
-target_link_libraries(teste-algoritmos ${VTK_LIBRARIES} ${ITK_LIBRARIES})
+target_link_libraries(outra-fourier ${VTK_LIBRARIES} ${ITK_LIBRARIES})
 #O speed log (https://github.com/gabime/spdlog)
 include_directories(C:/libs/spdlog/include/spdlog)
 

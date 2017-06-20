@@ -10,21 +10,13 @@
 
 int main(int argc, char* argv[])
 {
-	if (argc != 5)
-	{
-		std::cerr << "Usage: " << std::endl;
-		std::cerr << argv[0];
-		std::cerr << " <InputFileName> <Real filename> <Imaginary filename> <Modulus filename>";
-		std::cerr << std::endl;
-		return EXIT_FAILURE;
-	}
 
-	const char * inputFileName = argv[1];
-	const char * realFileName = argv[2];
-	const char * imaginaryFileName = argv[3];
-	const char * modulusFileName = argv[4];
+	const char * inputFileName = "C:\\src\\exdental\\black_dot_1_channel.png";
+	const char * realFileName = "C:\\src\\exdental\\black_dot_1_channel_real.png";
+	const char * imaginaryFileName = "C:\\src\\exdental\\black_dot_1_channel_imaginary.png";
+	const char * modulusFileName = "C:\\src\\exdental\\black_dot_1_channel_modulus.png";
 
-	const unsigned int Dimension = 3;
+	const unsigned int Dimension = 2;
 
 	typedef float                                   FloatPixelType;
 	typedef itk::Image< FloatPixelType, Dimension > FloatImageType;
@@ -36,21 +28,11 @@ int main(int argc, char* argv[])
 	typedef unsigned char UnsignedCharPixelType;
 	typedef itk::Image< UnsignedCharPixelType, Dimension > UnsignedCharImageType;
 
-	// Some FFT filter implementations, like VNL's, need the image size to be a
-	// multiple of small prime numbers.
-	typedef itk::WrapPadImageFilter< FloatImageType, FloatImageType > PadFilterType;
-	PadFilterType::Pointer padFilter = PadFilterType::New();
-	padFilter->SetInput(reader->GetOutput());
-	PadFilterType::SizeType padding;
-	// Input size is [48, 62, 42].  Pad to [48, 64, 48].
-	padding[0] = 0;
-	padding[1] = 2;
-	padding[2] = 6;
-	padFilter->SetPadUpperBound(padding);
 
+	
 	typedef itk::ForwardFFTImageFilter< FloatImageType > FFTType;
 	FFTType::Pointer fftFilter = FFTType::New();
-	fftFilter->SetInput(padFilter->GetOutput());
+	fftFilter->SetInput(reader->GetOutput());
 
 	typedef FFTType::OutputImageType FFTOutputImageType;
 
@@ -58,6 +40,22 @@ int main(int argc, char* argv[])
 	typedef itk::ComplexToRealImageFilter< FFTOutputImageType, FloatImageType> RealFilterType;
 	RealFilterType::Pointer realFilter = RealFilterType::New();
 	realFilter->SetInput(fftFilter->GetOutput());
+
+	typedef itk::ImageFileWriter< FloatImageType > FloatWriterType;
+	FloatWriterType::Pointer vtkWriter = FloatWriterType::New();
+	vtkWriter->SetFileName("C:\\src\\exdental\\black_dot_1_channel_real.mha");
+	vtkWriter->SetInput(realFilter->GetOutput());
+	try
+	{
+		vtkWriter->Update();
+	}
+	catch (itk::ExceptionObject & error)
+	{
+		std::cerr << "Error: " << error << std::endl;
+		return EXIT_FAILURE;
+	}
+
+
 
 	typedef itk::RescaleIntensityImageFilter< FloatImageType, UnsignedCharImageType > RescaleFilterType;
 	RescaleFilterType::Pointer realRescaleFilter = RescaleFilterType::New();
