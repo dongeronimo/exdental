@@ -42,9 +42,27 @@ vtkSmartPointer<vtkImageData> GerarSinograma(vector<LinhaProjetada> linhas);
 vtkSmartPointer<vtkImageData> ReconstrucaoSimpleBackprojection(vtkSmartPointer<vtkImageData> sinograma);
 //Cria uma tela pra ver a imagem
 vtkSmartPointer<vtkImageViewer2> GerarVisualizacao(vtkSmartPointer<vtkImageData> img);
+
+const unsigned int Dimension = 2;
+typedef double                                   FloatPixelType;
+typedef itk::Image< FloatPixelType, Dimension > FloatImageType;
+FloatImageType::Pointer FourierTransform(FloatImageType::Pointer img)
+{
+	typedef itk::ForwardFFTImageFilter< FloatImageType > FFTType;
+	FFTType::Pointer fftFilter = FFTType::New();
+	fftFilter->SetInput(img);
+	fftFilter->Update();
+	typedef FFTType::OutputImageType FFTOutputImageType;
+	typedef itk::ComplexToRealImageFilter< FFTOutputImageType, FloatImageType> RealFilterType;
+	RealFilterType::Pointer realFilter = RealFilterType::New();
+	realFilter->SetInput(fftFilter->GetOutput());
+	realFilter->Update();
+	return realFilter->GetOutput();
+}
+
 int main(int argc, char** argv)
 {
-	vtkSmartPointer<vtkImageData> imagem = LoadImagemOriginal("C:\\src\\exdental\\black_dot.png");
+	vtkSmartPointer<vtkImageData> imagem = LoadImagemOriginal("C:\\src\\exdental\\black_dot_1_channel.png");
 	array<double, 3> origemDaImagem;
 	imagem->GetOrigin(origemDaImagem.data());
 	array<double, 3> spacingDaImagem;
@@ -54,13 +72,12 @@ int main(int argc, char** argv)
 	array<int, 3> dimensoesDaImagem;
 	imagem->GetDimensions(dimensoesDaImagem.data());
 	//teste de fazer uma fourier transform
-	typedef itk::Image<float, 2> ImageType;
-	ImageType::Pointer itkImage = ImageType::New();
-	ImageType::RegionType region;
-	ImageType::IndexType index;
+	FloatImageType::Pointer itkImage = FloatImageType::New();
+	FloatImageType::RegionType region;
+	FloatImageType::IndexType index;
 	index[0] = 0; index[1] = 0;
 	region.SetIndex(index);
-	ImageType::SizeType size;
+	FloatImageType::SizeType size;
 	size[0] = dimensoesDaImagem[0];
 	size[1] = dimensoesDaImagem[1];
 	region.SetSize(size);
@@ -68,41 +85,23 @@ int main(int argc, char** argv)
 	itkImage->Allocate();
 	//A passagem tem que ser manual pq o fft exige uma entrada de numeros reais.
 	unsigned char *sourceBuffer = reinterpret_cast<unsigned char*>(imagem->GetScalarPointer());
-	float *destBuffer = itkImage->GetBufferPointer();
+	double *destBuffer = itkImage->GetBufferPointer();
 	for(auto i=0; i<dimensoesDaImagem[0]*dimensoesDaImagem[1]; i++)
 	{
 		destBuffer[i] = sourceBuffer[i * 3];
 	}
 	//A partir daqui, a imagem está na ITK, pra eu ver se consigo fazer a fourier na ITK funcionar, pq 
 	//a na VTK ficou uma merda.
-	typedef itk::ForwardFFTImageFilter< ImageType > FFTType;//This filter works only for real single-component input image types.
+	typedef itk::ForwardFFTImageFilter< FloatImageType > FFTType;//This filter works only for real single-component input image types.
 	FFTType::Pointer fftFilter = FFTType::New();
 	fftFilter->SetInput(itkImage);
 	typedef FFTType::OutputImageType FFTOutputImageType;
-	typedef itk::ComplexToRealImageFilter< FFTOutputImageType, ImageType> RealFilterType;
+	typedef itk::ComplexToRealImageFilter< FFTOutputImageType, FloatImageType> RealFilterType;
 	RealFilterType::Pointer realFilter = RealFilterType::New();
 	realFilter->SetInput(fftFilter->GetOutput());
-	typedef itk::RescaleIntensityImageFilter< ImageType, itk::Image<unsigned char, 2> > RescaleFilterType;
-	//volta de real pra unsigned char pra gravar.
-	RescaleFilterType::Pointer realRescaleFilter = RescaleFilterType::New();
-	realRescaleFilter->SetInput(realFilter->GetOutput());
-	realRescaleFilter->SetOutputMinimum(itk::NumericTraits< unsigned char >::min());
-	realRescaleFilter->SetOutputMaximum(itk::NumericTraits< unsigned char >::max());
-	//grava
-	typedef itk::ImageFileWriter<  itk::Image<unsigned char, 2> > WriterType;
-	WriterType::Pointer realWriter = WriterType::New();
-	realWriter->SetFileName("C:\\src\\exdental\\eh_a_fourier.png");
-	realWriter->SetInput(realRescaleFilter->GetOutput());
-	try
-	{
-		realWriter->Update();
-	}
-	catch (itk::ExceptionObject & error)
-	{
-		std::cerr << "Error: " << error << std::endl;
-		return EXIT_FAILURE;
-	}
-
+	realFilter->Update();
+	FloatImageType::Pointer resultadoFourier = realFilter->GetOutput();
+	//Aqui eu tenho a fourier da imagem.
 	//Pega as projeções dos raios fazendo as inclinações da imagem
 	vector<LinhaProjetada> linhas;
 	for(int i=0; i<=360;i++)
@@ -112,6 +111,7 @@ int main(int argc, char** argv)
 		linhas.push_back(linhaAtual);
 	}
 	vtkSmartPointer<vtkImageData> sinograma = GerarSinograma(linhas);
+	//Faço a fourier da projeção zero.
 
 	
 
