@@ -18,6 +18,7 @@
 #include <vtkImageReslice.h>
 #include <vtkPNGWriter.h>
 #include <vtkImageInterpolator.h>
+#include <itkImportImageFilter.h>
 
 #include <itkForwardFFTImageFilter.h>
 #include <itkComplexToRealImageFilter.h>
@@ -29,6 +30,9 @@ using namespace std;
 
 typedef array<unsigned int, 3> TuplaRGB;
 typedef vector<TuplaRGB> LinhaProjetada;
+const unsigned int Dimension = 2;
+typedef double                                   FloatPixelType;
+typedef itk::Image< FloatPixelType, Dimension > FloatImageType;
 
 vtkSmartPointer<vtkImageData> LoadImagemOriginal(string filepath);
 void SalvarImagem(vtkSmartPointer<vtkImageData> img, string filename);
@@ -37,31 +41,18 @@ vtkSmartPointer<vtkImageData> RotateImage(vtkSmartPointer<vtkImageData>input, do
 //Projeta a imagem passado raios nela.
 LinhaProjetada CalculaProjecaoDaImagem(vtkSmartPointer<vtkImageData> rotatedImage, vtkSmartPointer<vtkImageData> originalImage);
 //Monta o sinograma
-vtkSmartPointer<vtkImageData> GerarSinograma(vector<LinhaProjetada> linhas);
+vtkSmartPointer<vtkImageData> GerarSinograma(vtkSmartPointer<vtkImageData> imagem);
+vtkSmartPointer<vtkImageData> GerarSinogramaMK2(vtkSmartPointer<vtkImageData>imagem);
+
 //Reconstrução da imagem
 vtkSmartPointer<vtkImageData> ReconstrucaoSimpleBackprojection(vtkSmartPointer<vtkImageData> sinograma);
 //Cria uma tela pra ver a imagem
 vtkSmartPointer<vtkImageViewer2> GerarVisualizacao(vtkSmartPointer<vtkImageData> img);
 
-const unsigned int Dimension = 2;
-typedef double                                   FloatPixelType;
-typedef itk::Image< FloatPixelType, Dimension > FloatImageType;
-FloatImageType::Pointer FourierTransform(FloatImageType::Pointer img)
-{
-	typedef itk::ForwardFFTImageFilter< FloatImageType > FFTType;
-	FFTType::Pointer fftFilter = FFTType::New();
-	fftFilter->SetInput(img);
-	fftFilter->Update();
-	typedef FFTType::OutputImageType FFTOutputImageType;
-	typedef itk::ComplexToRealImageFilter< FFTOutputImageType, FloatImageType> RealFilterType;
-	RealFilterType::Pointer realFilter = RealFilterType::New();
-	realFilter->SetInput(fftFilter->GetOutput());
-	realFilter->Update();
-	return realFilter->GetOutput();
-}
-
 int main(int argc, char** argv)
 {
+	//black_dot_1_channel.png
+	//vtkSmartPointer<vtkImageData> imagem = LoadImagemOriginal("C:\\src\\exdental\\phantom.png");
 	vtkSmartPointer<vtkImageData> imagem = LoadImagemOriginal("C:\\src\\exdental\\black_dot_1_channel.png");
 	array<double, 3> origemDaImagem;
 	imagem->GetOrigin(origemDaImagem.data());
@@ -88,38 +79,110 @@ int main(int argc, char** argv)
 	double *destBuffer = itkImage->GetBufferPointer();
 	for(auto i=0; i<dimensoesDaImagem[0]*dimensoesDaImagem[1]; i++)
 	{
-		destBuffer[i] = sourceBuffer[i * 3];
+		destBuffer[i] = sourceBuffer[i];
 	}
-	//A partir daqui, a imagem está na ITK, pra eu ver se consigo fazer a fourier na ITK funcionar, pq 
-	//a na VTK ficou uma merda.
-	typedef itk::ForwardFFTImageFilter< FloatImageType > FFTType;//This filter works only for real single-component input image types.
-	FFTType::Pointer fftFilter = FFTType::New();
-	fftFilter->SetInput(itkImage);
-	typedef FFTType::OutputImageType FFTOutputImageType;
-	typedef itk::ComplexToRealImageFilter< FFTOutputImageType, FloatImageType> RealFilterType;
-	RealFilterType::Pointer realFilter = RealFilterType::New();
-	realFilter->SetInput(fftFilter->GetOutput());
-	realFilter->Update();
-	FloatImageType::Pointer resultadoFourier = realFilter->GetOutput();
-	//Aqui eu tenho a fourier da imagem.
-	//Pega as projeções dos raios fazendo as inclinações da imagem
-	vector<LinhaProjetada> linhas;
-	for(int i=0; i<=360;i++)
-	{
-		vtkSmartPointer<vtkImageData> rotatedImage = RotateImage(imagem, i);
-		LinhaProjetada linhaAtual = CalculaProjecaoDaImagem(rotatedImage, imagem);
-		linhas.push_back(linhaAtual);
-	}
-	vtkSmartPointer<vtkImageData> sinograma = GerarSinograma(linhas);
-	//Faço a fourier da projeção zero.
-
-	
+	vtkSmartPointer<vtkImageData> sinograma = GerarSinogramaMK2(imagem);
 
 	vtkSmartPointer<vtkImageViewer2> visualizaçãoDoSinograma = GerarVisualizacao(sinograma);
 	//vtkSmartPointer<vtkImageViewer2> visualizaçãoDaFFT = GerarVisualizacao(fft->GetOutput());
 	visualizaçãoDoSinograma->GetRenderWindow()->GetInteractor()->Start();
 	return EXIT_SUCCESS;
 }
+
+vtkSmartPointer<vtkImageData> GerarSinogramaMK2(vtkSmartPointer<vtkImageData> imagem)
+{
+//VTK pra ITK
+	typedef itk::ImportImageFilter< float, 3 >   ImportFilterType;
+	ImportFilterType::Pointer importFilter = ImportFilterType::New();
+	ImportFilterType::SizeType  size;
+	size[0] = imagem->GetDimensions()[0];
+	size[1] = imagem->GetDimensions()[1];
+	size[2] = imagem->GetDimensions()[2];
+	ImportFilterType::IndexType start;
+	start.Fill(0);
+	ImportFilterType::RegionType region;
+	region.SetIndex(start);
+	region.SetSize(size);
+	importFilter->SetRegion(region);
+
+	double origin[Dimension];
+	origin[0] = 0.0;    // X coordinate
+	origin[1] = 0.0;    // Y coordinate
+	origin[2] = 0.0;    // Z coordinate
+
+	importFilter->SetOrigin(origin);
+
+	double spacing[Dimension];
+	spacing[0] = 1.0;    // along X direction
+	spacing[1] = 1.0;    // along Y direction
+	spacing[2] = 1.0;    // along Z direction
+
+	importFilter->SetSpacing(spacing);
+
+	const unsigned int numberOfPixels = size[0] * size[1] * size[2];
+	PixelType * localBuffer = new PixelType[numberOfPixels];
+
+	const double radius = 80.0;
+
+	const double radius2 = radius * radius;
+	PixelType * it = localBuffer;
+
+	for (unsigned int z = 0; z < size[2]; z++)
+	{
+		const double dz = static_cast<double>(z) - static_cast<double>(size[2]) / 2.0;
+		for (unsigned int y = 0; y < size[1]; y++)
+		{
+			const double dy = static_cast<double>(y) - static_cast<double>(size[1]) / 2.0;
+			for (unsigned int x = 0; x < size[0]; x++)
+			{
+				const double dx = static_cast<double>(x) - static_cast<double>(size[0]) / 2.0;
+				const double d2 = dx*dx + dy*dy + dz*dz;
+				*it++ = (d2 < radius2) ? 255 : 0;
+			}
+		}
+	}
+
+	const bool importImageFilterWillOwnTheBuffer = true;
+	importFilter->SetImportPointer(localBuffer, numberOfPixels,
+		importImageFilterWillOwnTheBuffer);
+//Fourier da imagem	
+	typedef itk::ForwardFFTImageFilter< FloatImageType > FFTType;
+	FFTType::Pointer fftFilter = FFTType::New();
+	fftFilter->SetInput(img);
+	fftFilter->Update();
+	typedef FFTType::OutputImageType FFTOutputImageType;
+	typedef itk::ComplexToRealImageFilter< FFTOutputImageType, FloatImageType> RealFilterType;
+	RealFilterType::Pointer realFilter = RealFilterType::New();
+	realFilter->SetInput(fftFilter->GetOutput());
+	realFilter->Update();
+	return realFilter->GetOutput();
+}
+
+vtkSmartPointer<vtkImageData> GerarSinograma(vtkSmartPointer<vtkImageData> imagem )
+{
+	vector<LinhaProjetada> linhas;
+	for (int i = 0; i <= 360; i++)
+	{
+		vtkSmartPointer<vtkImageData> rotatedImage = RotateImage(imagem, i);
+		LinhaProjetada linhaAtual = CalculaProjecaoDaImagem(rotatedImage, imagem);
+		linhas.push_back(linhaAtual);
+	}
+	vtkSmartPointer<vtkImageData> testeImagem = vtkSmartPointer<vtkImageData>::New();
+	testeImagem->SetExtent(0, 359, 0, 255, 0, 1);
+	testeImagem->SetOrigin(0, 0, 0);
+	testeImagem->SetSpacing(1, 1, 1);
+	testeImagem->AllocateScalars(VTK_UNSIGNED_INT, 1);
+	//passa os dados
+	for (int x = 0; x < 360; x++)
+	{
+		for (int y = 0; y<256; y++)
+		{
+			testeImagem->SetScalarComponentFromDouble(x, y, 0, 0, linhas[x][y][0]);
+		}
+	}
+	return testeImagem;
+}
+
 vtkSmartPointer<vtkImageData> ReconstrucaoSimpleBackprojection(vtkSmartPointer<vtkImageData> sinograma)
 {
 	//O X é o ângulo [0,360], o Y é a amostragem
@@ -139,23 +202,7 @@ vtkSmartPointer<vtkImageData> ReconstrucaoSimpleBackprojection(vtkSmartPointer<v
 
 	return reconstrucao;
 }
-vtkSmartPointer<vtkImageData> GerarSinograma(vector<LinhaProjetada> linhas)
-{
-	vtkSmartPointer<vtkImageData> testeImagem = vtkSmartPointer<vtkImageData>::New();
-	testeImagem->SetExtent(0, 359, 0, 255, 0, 1);
-	testeImagem->SetOrigin(0, 0, 0);
-	testeImagem->SetSpacing(1, 1, 1);
-	testeImagem->AllocateScalars(VTK_UNSIGNED_INT, 1);
-	//passa os dados
-	for (int x = 0; x < 360; x++)
-	{
-		for (int y = 0; y<256; y++)
-		{
-			testeImagem->SetScalarComponentFromDouble(x, y, 0, 0, linhas[x][y][0]);
-		}
-	}
-	return testeImagem;
-}
+
 
 vtkSmartPointer<vtkImageViewer2> GerarVisualizacao(vtkSmartPointer<vtkImageData> img)
 {
