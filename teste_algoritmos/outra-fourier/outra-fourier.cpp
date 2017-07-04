@@ -1,10 +1,13 @@
 #include <iostream>
+#include <string>
 #include <itkImage.h>
 #include <itkImageFileReader.h>
+#include <itkImageFileWriter.h>
 #include <itkRescaleIntensityImageFilter.h>
 #include <itkForwardFFTImageFilter.h>
 #include <itkComplexToModulusImageFilter.h>
 #include <itkMinimumMaximumImageCalculator.h>
+#include <itkCastImageFilter.h>;
 using namespace std;
 
 typedef itk::Image<float, 2> FloatImage;
@@ -16,17 +19,25 @@ FloatImage::Pointer LoadMyImage();
 
 void ShowScalarRange(FloatImage::Pointer img);
 
+void SaveMyImage(FloatImage::Pointer img, string filename);
+
 int main(int argc, char** argv)
 {
 	FloatImage::Pointer originalImage = LoadMyImage();
+	cout << "Range da original:" << endl;
+	ShowScalarRange(originalImage);
 	//Now, transform the image using the fourier transform
 	FourierTransformType::Pointer fourier = FourierTransformType::New();
 	fourier->SetInput(originalImage);
+	//
 	//Modulus of fourier
 	ModulusImageFilter::Pointer modulus_image_filter = ModulusImageFilter::New();
 	modulus_image_filter->SetInput(fourier->GetOutput());
 	modulus_image_filter->Update();
-
+	cout << "Range do modulus da fourier" << endl;
+	ShowScalarRange(modulus_image_filter->GetOutput());
+	//A range da fourier está (0, 126)
+	SaveMyImage(modulus_image_filter->GetOutput(), "c:\\src\\modulus.png");
 	return EXIT_SUCCESS;
 }
 
@@ -41,7 +52,6 @@ FloatImage::Pointer LoadMyImage()
 	rescaler->SetOutputMaximum(1.0);
 	rescaler->SetOutputMinimum(0.0);
 	rescaler->Update();
-	ShowScalarRange(rescaler->GetOutput());
 	return rescaler->GetOutput();
 }
 
@@ -54,5 +64,18 @@ void ShowScalarRange(FloatImage::Pointer img)
 	minMax->ComputeMinimum();
 	float min = minMax->GetMinimum();
 	float max = minMax->GetMaximum();
-	cout << "Minimo " << min << " Maximo " << max;
+	cout << "Minimo " << min << " Maximo " << max << endl;
+}
+
+void SaveMyImage(FloatImage::Pointer img, string filename)
+{
+	typedef itk::Image<unsigned char, 2> UCharImage;
+	typedef itk::CastImageFilter<FloatImage, UCharImage> FloatToUCharFilter;
+	typedef itk::ImageFileWriter<UCharImage> PngWriterFilter;
+	FloatToUCharFilter::Pointer caster = FloatToUCharFilter::New();
+	caster->SetInput(img);
+	PngWriterFilter::Pointer writer = PngWriterFilter::New();
+	writer->SetFileName(filename.c_str());
+	writer->SetInput(caster->GetOutput());
+	writer->Write();
 }
